@@ -10,16 +10,33 @@
             background: #aaa;    
         }
 
-        .canvas
+        .puzzle
         {
+            border: 1px solid #000;
+        }
+
+        .dest
+        {
+            width: 100%;
+            height: 330px;
+            float:left;
+            border: 1px solid #F00;
+            position: relative;
+        }
+
+        .dest canvas
+        {
+            /*float:left;*/
+            position: absolute;
             border: 1px solid #000;
         }
     </style>
 </head>
 <body>
-<img src="/img.jpg" alt=""/>
+<img src="img.jpg" alt=""/>
+<div class="dest"></div>
 <script type="text/javascript">
-    new Puzzler('/img.jpg', 3, 4);
+    new Puzzler('img.jpg', 5, 5);
 </script>
 </body>
 </html>

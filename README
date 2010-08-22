@@ -1,0 +1,6 @@
+Puzzle - JS class to cut any image for puzzle
+
+Class under development.
+
+Usage:
+new Puzzler('http://imagehost.com/path_to_image.jpg', 5, 5);

@@ -9,6 +9,7 @@
 
 //TODO: разрезать по парам
 //TODO: сделать вариант с круглыми уголками
+//TODO: сверху - ceil, снизу floor
 
 /**
  * 
@@ -16,7 +17,7 @@
  * @param xCount
  * @param yCount
  */
-var Puzzler = function(imageSrc, xCount, yCount) {
+var Puzzler = function(imageSrc, xCount, yCount, callback) {
     var image = new Image();
 
     var pieces = [],
@@ -115,73 +116,108 @@ var Puzzler = function(imageSrc, xCount, yCount) {
                     height // destination height
                     );
 
-                canvasContext.fillStyle = 'red';
-                canvasContext.font = '20px sans-serif';
-                if (pieceRelations[y][x][0] !== null) {
+                var neighbours = {},
+                    relationSide;
 
+                if (pieceRelations[y][x][0] === false) {
+                    relationSide = cutter.female_0(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
-                    if (pieceRelations[y][x][0] === false) {
-                        cutter.female_0(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-                    }
+                    relationSide.attachToSide = 'bottom';
+                    relationSide.attachToX = x;
+                    relationSide.attachToY = y - 1;
+                    neighbours['top']  = relationSide;
 
-                    if (pieceRelations[y][x][0] === true) {
-                        cutter.male_0(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-                    }
+                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
-                    canvasContext.fillText(pieceRelations[y][x][0] + 0, pieceWidth/2, 20);
+                } else if (pieceRelations[y][x][0] === true) {
+                    relationSide = cutter.male_0(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
+
+                    relationSide.attachToSide = 'bottom';
+                    relationSide.attachToX = x;
+                    relationSide.attachToY = y - 1;
+                    neighbours['top']  = relationSide;
+
+                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
-                if (pieceRelations[y][x][1] !== null) {
+                if (pieceRelations[y][x][1] === false) {
+                    relationSide = cutter.female_1(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
+                    relationSide.attachToSide = 'left';
+                    relationSide.attachToX = x + 1;
+                    relationSide.attachToY = y;
+                    neighbours['right']  = relationSide;
 
-                    if (pieceRelations[y][x][1] === false) {
-                        cutter.female_1(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-                    }
+                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
-                    if (pieceRelations[y][x][1] === true) {
-                        cutter.male_1(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-                    }
+                } else if (pieceRelations[y][x][1] === true) {
+                    relationSide = cutter.male_1(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
-                    canvasContext.fillText(pieceRelations[y][x][1] + 0, pieceWidth - 20, pieceHeight/2);
+                    relationSide.attachToSide = 'left';
+                    relationSide.attachToX = x + 1;
+                    relationSide.attachToY = y;
+                    neighbours['right']  = relationSide;
+
+                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+
                 }
 
-                if (pieceRelations[y][x][2] !== null) {
+                if (pieceRelations[y][x][2] === false) {
+                    relationSide = cutter.female_2(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
+                    relationSide.attachToSide = 'top';
+                    relationSide.attachToX = x;
+                    relationSide.attachToY = y + 1;
+                    neighbours['bottom']  = relationSide;
 
-                    if (pieceRelations[y][x][2] === false) {
-                        cutter.female_2(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-                    }
+                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
-                    if (pieceRelations[y][x][2] === true) {
-                        cutter.male_2(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-                    }
+                } else if (pieceRelations[y][x][2] === true) {
+                    relationSide = cutter.male_2(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
-                    canvasContext.fillText(pieceRelations[y][x][2] + 0, pieceWidth/2, pieceHeight - 10);
+                    relationSide.attachToSide = 'top';
+                    relationSide.attachToX = x;
+                    relationSide.attachToY = y + 1;
+                    neighbours['bottom']  = relationSide;
+
+                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
-                if (pieceRelations[y][x][3] !== null) {
+                if (pieceRelations[y][x][3] === false) {
+                    relationSide = cutter.female_3(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
+                    relationSide.attachToSide = 'right';
+                    relationSide.attachToX = x - 1;
+                    relationSide.attachToY = y;
 
-                    if (pieceRelations[y][x][3] === false) {
-                        cutter.female_3(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-                    }
+                    neighbours['left'] = relationSide;
 
-                    if (pieceRelations[y][x][3] === true) {
-                        cutter.male_3(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-                    }
+                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
-                    canvasContext.fillText(pieceRelations[y][x][3] + 0, 0, pieceHeight/2);
+                } else if (pieceRelations[y][x][3] === true) {
+                    relationSide = cutter.male_3(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
+
+                    relationSide.attachToSide = 'right';
+                    relationSide.attachToX = x - 1;
+                    relationSide.attachToY = y;
+
+                    neighbours['left'] = relationSide;
+
+                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
-                document.getElementsByClassName('dest')[0].appendChild(canvas);
-                canvas.style.top = (y * (pieceHeight + 60)) + 'px';
-                canvas.style.left = (x * (pieceWidth + 60)) + 'px';
-
-                pieces[y][x] = canvas;
+                pieces[y][x] = {
+                    canvas: canvas,
+                    width: pieceWidth,
+                    height: pieceHeight,
+                    offsetX: pieceNullX,
+                    offsetY: pieceNullY,
+                    neighbours: neighbours
+                }
             }
         }
 
-        console.log(pieces);
+        callback(pieces);
     };
 
     image.onerror = function() {
@@ -321,8 +357,20 @@ Puzzler.prototype = {
              */
             _size: 0.2,
 
+            drawPoint: function(canvas, x, y) {
+                var canvasContext = canvas.getContext('2d');
+
+                canvasContext.beginPath();
+                canvasContext.strokeStyle = '#F00';
+                canvasContext.moveTo(x - 1, y - 1);
+                canvasContext.lineTo(x, y);
+                canvasContext.stroke();
+                canvasContext.closePath();
+            },
+
             //TODO: не вырезать дату полного изображения
             //TODO: не бегать по всей длине/высоте
+            //TODO: offsetX считается по-разному
             male_0: function(canvas, width, height, x, y) {
                 var rw = width / 3,
                     x1 = Math.round(rw + x),
@@ -332,6 +380,12 @@ Puzzler.prototype = {
 
                 this._rectV(canvas.getContext('2d'), x1, y1, x2, y2);
                 this._makeTransparent(canvas, 0, 0, canvas.width, y2, false);
+
+                return {
+                    type: 'male',
+                    offsetX: Math.round((x1 - x2) / 2 + x2),
+                    offsetY: Math.round((y2 - y1) / 2 + y1)
+                };
             },
 
             male_1: function(canvas, width, height, x, y) {
@@ -343,6 +397,12 @@ Puzzler.prototype = {
 
                 this._rectH(canvas.getContext('2d'), x1, y1, x2, y2);
                 this._makeTransparent(canvas, x2, 0, canvas.width, canvas.height, false);
+
+                return {
+                    type: 'male',
+                    offsetX: Math.round((x1 - x2) / 2 + x2),
+                    offsetY: Math.round((y2 - y1) / 2 + y1)
+                };
             },
 
             male_2: function(canvas, width, height, x, y) {
@@ -354,6 +414,12 @@ Puzzler.prototype = {
 
                 this._rectV(canvas.getContext('2d'), x1, y1, x2, y2);
                 this._makeTransparent(canvas, 0, y2, canvas.width, canvas.height, false);
+
+                return {
+                    type: 'male',
+                    offsetX: Math.round((x1 - x2) / 2 + x2),
+                    offsetY: Math.round((y2 - y1) / 2 + y1)
+                };
             },
 
             male_3: function(canvas, width, height, x, y) {
@@ -365,6 +431,12 @@ Puzzler.prototype = {
 
                 this._rectH(canvas.getContext('2d'), x1, y1, x2, y2);
                 this._makeTransparent(canvas, 0, 0, x2, canvas.height, false);
+
+                return {
+                    type: 'male',
+                    offsetX: Math.round((x1 - x2) / 2 + x2),
+                    offsetY: Math.round((y2 - y1) / 2 + y1)
+                };
             },
 
             female_0: function(canvas, width, height, x, y) {
@@ -376,6 +448,12 @@ Puzzler.prototype = {
 
                 this._rectV(canvas.getContext('2d'), x1, y1, x2, y2);
                 this._makeTransparent(canvas, 0, 0, canvas.width, y2, true);
+
+                return {
+                    type: 'female',
+                    offsetX: Math.round((x2 - x1) / 2 + x1),
+                    offsetY: Math.round((y2 - y1) / 2 + y1)
+                };
             },
 
             female_1: function(canvas, width, height, x, y) {
@@ -387,6 +465,12 @@ Puzzler.prototype = {
 
                 this._rectH(canvas.getContext('2d'), x1, y1, x2, y2);
                 this._makeTransparent(canvas, x2, 0, canvas.width, canvas.height, true);
+
+                return {
+                    type: 'female',
+                    offsetX: Math.round((x2 - x1) / 2 + x1),
+                    offsetY: Math.round((y2 - y1) / 2 + y1)
+                };
             },
 
             female_2: function(canvas, width, height, x, y) {
@@ -398,6 +482,12 @@ Puzzler.prototype = {
 
                 this._rectV(canvas.getContext('2d'), x1, y1, x2, y2);
                 this._makeTransparent(canvas, 0, y2, canvas.width, canvas.height, true);
+
+                return {
+                    type: 'female',
+                    offsetX: Math.round((x2 - x1) / 2 + x1),
+                    offsetY: Math.round((y2 - y1) / 2 + y1)
+                };
             },
 
             female_3: function(canvas, width, height, x, y) {
@@ -409,6 +499,12 @@ Puzzler.prototype = {
 
                 this._rectH(canvas.getContext('2d'), x1, y1, x2, y2);
                 this._makeTransparent(canvas, 0, 0, x2, canvas.height, true);
+
+                return {
+                    type: 'female',
+                    offsetX: Math.round((x2 - x1) / 2 + x1),
+                    offsetY: Math.round((y2 - y1) / 2 + y1)
+                };
             },
 
             getSize: function(size) {

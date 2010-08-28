@@ -3,7 +3,9 @@
 <html>
 <head>
     <title>Puzzle example</title>
+    <script type="text/javascript" src="//yandex.st/jquery/1.4.2/jquery.js"></script>
     <script type="text/javascript" src="Puzzler.js"></script>
+    <script type="text/javascript" src="PuzzleGame.js"></script>
     <style type="text/css">
         body
         {
@@ -28,15 +30,34 @@
         {
             /*float:left;*/
             position: absolute;
-            border: 1px solid #000;
+            /*border: 1px solid #000;*/
         }
     </style>
 </head>
 <body>
-<img src="img.jpg" alt=""/>
-<div class="dest"></div>
+<form action="" id="form">
+    <fieldset>
+        URL: <input type="text" name="url" value="/img.jpg"/>
+        xCount: <input type="text" name="count-x" value="5"/>
+        YCount: <input type="text" name="count-y" value="5"/>
+
+        <input type="submit" value="Start" id="startGame"/>
+    </fieldset>
+</form>
 <script type="text/javascript">
-    new Puzzler('img.jpg', 5, 5);
+    $('#form').submit(function() {
+        var form = this;
+
+        var url = this.url.value;
+        var countX = this['count-x'].value;
+        var countY = this['count-y'].value;
+
+        new PuzzleGame($('#dest'), url, countY, countX);
+
+        return false;
+    });
 </script>
+<img src="img.jpg" alt=""/>
+<div class="dest" id="dest"></div>
 </body>
 </html>

@@ -73,7 +73,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                 var pieceNullY = 0;
 
                 var canvas = document.createElement('canvas');
-                canvas.id = 'part' + x + '-' + y;
+                canvas.id = 'part' + y + '-' + x;
                 canvas.width = pieceWidth;
                 canvas.height = pieceHeight;
 
@@ -116,7 +116,6 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     height // destination height
                     );
 
-                //TODO: всегда делать массив и не проверять его наличие
                 var neighbours = {
                     left: [],
                     right: [],
@@ -221,14 +220,17 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                 }
 
                 var container = document.createElement('div');
-//                container.style.cssText = 'position:absolute;height:' + canvas.height + 'px;width:' + canvas.width + 'px';
-                container.style.cssText = 'position:absolute;';
+                container.style.cssText = 'position:absolute;height:' + canvas.height + 'px;width:' + canvas.width + 'px';
+//                container.style.cssText = 'position:absolute;';
                 container.appendChild(canvas);
 
                 canvas.style.cssText = 'position:absolute;top:0;left:0';
 
                 pieces[y][x] = {
                     canvas: [canvas],
+                    position: [
+                        [y, x]
+                    ],
                     container: container,
                     width: pieceWidth,
                     height: pieceHeight,
@@ -375,38 +377,35 @@ Puzzler.prototype = {
             });
         });
 
-        if (piece1.neighbours['left'] && piece1.neighbours['right']) {
-            for (var i = 0; i < piece1.neighbours['left'].length; i++) {
-                var neighbourLeft = piece1.neighbours['left'][i];
+        for (var i = 0; i < piece1.neighbours['left'].length; i++) {
+            var neighbourLeft = piece1.neighbours['left'][i];
 
-                for (var k = 0; k < piece1.neighbours['right'].length; k++) {
-                    var neighbourRight = piece1.neighbours['right'][k];
+            for (var k = 0; k < piece1.neighbours['right'].length; k++) {
+                var neighbourRight = piece1.neighbours['right'][k];
 
-                    if (neighbourLeft.offsetX === neighbourRight.offsetX
-                        && neighbourLeft.offsetY === neighbourRight.offsetY) {
-                        piece1.neighbours['left'].splice(i, 1);
-                        piece1.neighbours['right'].splice(k, 1);
-                    }
+                if (neighbourLeft.offsetX === neighbourRight.offsetX
+                    && neighbourLeft.offsetY === neighbourRight.offsetY) {
+                    piece1.neighbours['left'].splice(i, 1);
+                    piece1.neighbours['right'].splice(k, 1);
                 }
             }
         }
 
-        if (piece1.neighbours['top'] && piece1.neighbours['bottom']) {
-            for (var i = 0; i < piece1.neighbours['top'].length; i++) {
-                var neighbourLeft = piece1.neighbours['top'][i];
+        for (var i = 0; i < piece1.neighbours['top'].length; i++) {
+            var neighbourTop = piece1.neighbours['top'][i];
 
-                for (var k = 0; k < piece1.neighbours['bottom'].length; k++) {
-                    var neighbourRight = piece1.neighbours['bottom'][k];
+            for (var k = 0; k < piece1.neighbours['bottom'].length; k++) {
+                var neighbourBottom = piece1.neighbours['bottom'][k];
 
-                    if (neighbourLeft.offsetX === neighbourRight.offsetX
-                        && neighbourLeft.offsetY === neighbourRight.offsetY) {
-                        piece1.neighbours['top'].splice(i, 1);
-                        piece1.neighbours['bottom'].splice(k, 1);
-                    }
+                if (neighbourTop.offsetX === neighbourBottom.offsetX
+                    && neighbourTop.offsetY === neighbourBottom.offsetY) {
+                    piece1.neighbours['top'].splice(i, 1);
+                    piece1.neighbours['bottom'].splice(k, 1);
                 }
             }
         }
 
+        piece1.position = piece1.position.concat(piece2.position);
 
         return piece1;
     },

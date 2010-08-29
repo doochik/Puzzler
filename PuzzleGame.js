@@ -28,17 +28,19 @@ function PuzzleGame($node, url, countX, countY) {
         }
     });
 
-    var startX , startY, startTop, startLeft, canvas;
+    var startX , startY, startTop, startLeft, canvas, blockStart = false;
 
     function startDrag(e) {
-        startX = e.clientX;
-        startY = e.clientY;
+        if (!blockStart) {
+            startX = e.clientX;
+            startY = e.clientY;
 
-        startTop = parseInt(this.style.top, 10);
-        startLeft = parseInt(this.style.left, 10);
+            startTop = parseInt(this.style.top, 10);
+            startLeft = parseInt(this.style.left, 10);
 
-        $(document).bind('mousemove.movepuzzle', e.data, continueDrag);
-        $(document).bind('mouseup.movepuzzle', e.data, stopDrag);
+            $(document).bind('mousemove.movepuzzle', e.data, continueDrag);
+            $(document).bind('mouseup.movepuzzle', e.data, stopDrag);
+        }
     }
 
     function continueDrag(e) {
@@ -83,20 +85,23 @@ function PuzzleGame($node, url, countX, countY) {
                     var distance = Math.sqrt(Math.pow((myAttachSide.offsetX + left) - neighbourX, 2) + Math.pow((myAttachSide.offsetY + top) - neighbourY, 2));
 
                     if (distance < 20) {
+                        blockStart = true;
                         $(piece.container).animate({
                             left: neighbourX - myAttachSide.offsetX,
                             top: neighbourY - myAttachSide.offsetY
                         }, function() {
-                            try{
-                            piecesCount -= piece.canvas.length;
+                            piecesCount--;
                             var newElement = Puzz.mergePieces(piece, myIndex, neighbour, neighbourIndex, key);
 
-                            puzzles[e.data.y][e.data.x] = puzzles[myAttachSide.attachToY][myAttachSide.attachToX] = newElement;
-                            }catch(e){console.log(e)}
+                            for (var i = 0, j = newElement.position.length; i < j; i++) {
+                                var pos = newElement.position[i];
+                                puzzles[pos[0]][pos[1]] = newElement;
+                            }
 
-                            if (piecesCount === 0) {
+                            if (piecesCount === 1) {
                                 alert('ta-dam!');
                             }
+                            blockStart = false;
                         });
                         exit = true;
                         return false;

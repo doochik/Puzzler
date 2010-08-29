@@ -1,7 +1,7 @@
 function PuzzleGame($node, url, countX, countY) {
     var puzzles;
 
-    new Puzzler(url, countX, countY, function(pieces) {
+    var Puzz = new Puzzler(url, countX, countY, function(pieces) {
 
         puzzles = pieces;
 
@@ -79,8 +79,9 @@ function PuzzleGame($node, url, countX, countY) {
                 $(piece.canvas).animate({
                     left: neighbourX - myAttachSide.offsetX,
                     top: neighbourY - myAttachSide.offsetY
+                }, function() {
+                    Puzz.mergePieces(piece, neighbour, key);
                 });
-
                 return false;
             }
 

@@ -10,7 +10,6 @@
 //TODO: разрезать по парам
 //TODO: сделать вариант с круглыми уголками
 //TODO: сверху - ceil, снизу floor
-//TODO: соседи должны быть массивом
 
 /**
  * 
@@ -117,7 +116,13 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     height // destination height
                     );
 
-                var neighbours = {},
+                //TODO: всегда делать массив и не проверять его наличие
+                var neighbours = {
+                    left: [],
+                    right: [],
+                    top: [],
+                    bottom: []
+                },
                     relationSide;
 
                 if (pieceRelations[y][x][0] === false) {
@@ -127,7 +132,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x;
                     relationSide.attachToY = y - 1;
                     relationSide.attachSize = cutter.getSize(pieceHeight);
-                    neighbours['top']  = relationSide;
+                    neighbours['top'].push(relationSide);
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
@@ -138,7 +143,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x;
                     relationSide.attachToY = y - 1;
                     relationSide.attachSize = cutter.getSize(pieceHeight);
-                    neighbours['top']  = relationSide;
+                    neighbours['top'].push(relationSide);
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
@@ -150,7 +155,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x + 1;
                     relationSide.attachToY = y;
                     relationSide.attachSize = cutter.getSize(pieceWidth);
-                    neighbours['right']  = relationSide;
+                    neighbours['right'].push(relationSide);
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
@@ -161,7 +166,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x + 1;
                     relationSide.attachToY = y;
                     relationSide.attachSize = cutter.getSize(pieceWidth);
-                    neighbours['right']  = relationSide;
+                    neighbours['right'].push(relationSide);
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
@@ -174,7 +179,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x;
                     relationSide.attachToY = y + 1;
                     relationSide.attachSize = cutter.getSize(pieceHeight);
-                    neighbours['bottom']  = relationSide;
+                    neighbours['bottom'].push(relationSide);
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
@@ -185,7 +190,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x;
                     relationSide.attachToY = y + 1;
                     relationSide.attachSize = cutter.getSize(pieceHeight);
-                    neighbours['bottom']  = relationSide;
+                    neighbours['bottom'].push(relationSide);
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
@@ -198,7 +203,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToY = y;
                     relationSide.attachSize = cutter.getSize(pieceWidth);
 
-                    neighbours['left'] = relationSide;
+                    neighbours['left'].push(relationSide);
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
@@ -210,13 +215,21 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToY = y;
                     relationSide.attachSize = cutter.getSize(pieceWidth);
 
-                    neighbours['left'] = relationSide;
+                    neighbours['left'].push(relationSide);
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
+                var container = document.createElement('div');
+//                container.style.cssText = 'position:absolute;height:' + canvas.height + 'px;width:' + canvas.width + 'px';
+                container.style.cssText = 'position:absolute;';
+                container.appendChild(canvas);
+
+                canvas.style.cssText = 'position:absolute;top:0;left:0';
+
                 pieces[y][x] = {
-                    canvas: canvas,
+                    canvas: [canvas],
+                    container: container,
                     width: pieceWidth,
                     height: pieceHeight,
                     offsetX: pieceNullX,
@@ -261,14 +274,17 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 Puzzler.prototype = {
 
     /**
-     * Merge two pieces into one.
+     * Merge two pieces into one container.
+     * It's simpler than merge two canvas into one.
      * @param piece1
      * @param piece2
      * @param {String} piece1ConnectingSide
      * @return {Canvas}
      */
-    mergePieces: function(piece1, piece2, piece1ConnectingSide) {
+    mergePieces: function(piece1, piece1Index, piece2, piece2Index, piece1ConnectingSide) {
+
         var tempPiece4Change;
+        var tempPieceIndex4Change;
 
         var side1,
             side2;
@@ -280,15 +296,17 @@ Puzzler.prototype = {
             // piece1 connecting to piece2 by top side (it's lower), so we have to change piece <-> piece2
             case 'top':
                 tempPiece4Change = piece1;
+                tempPieceIndex4Change = piece1Index;
+
                 piece1 = piece2;
+                piece1Index = piece2Index;
+
                 piece2 = tempPiece4Change;
+                piece2Index = tempPieceIndex4Change;
 
             case 'bottom':
-                side1 = piece1.neighbours['bottom'];
-                side2 = piece2.neighbours['top'];
-
-                delete piece1.neighbours['bottom'];
-                delete piece2.neighbours['top'];
+                side1 = piece1.neighbours['bottom'].splice(piece1Index, 1)[0];
+                side2 = piece2.neighbours['top'].splice(piece2Index, 1)[0];
 
                 connectTopAndBottom = true;
                 break;
@@ -296,15 +314,17 @@ Puzzler.prototype = {
             // same situation, piece1 is lefter than piece2
             case 'left':
                 tempPiece4Change = piece1;
+                tempPieceIndex4Change = piece1Index;
+
                 piece1 = piece2;
+                piece1Index = piece2Index;
+
                 piece2 = tempPiece4Change;
+                piece2Index = tempPieceIndex4Change;
 
             case 'right':
-                side1 = piece1.neighbours['right'];
-                side2 = piece2.neighbours['left'];
-
-                delete piece1.neighbours['right'];
-                delete piece2.neighbours['left'];
+                side1 = piece1.neighbours['right'].splice(piece1Index, 1)[0];
+                side2 = piece2.neighbours['left'].splice(piece2Index, 1)[0];
 
                 connectTopAndBottom = false;
         }
@@ -314,96 +334,81 @@ Puzzler.prototype = {
             height1 = piece1.canvas.height,
             height2 = piece2.canvas.height;
 
-        var context1 = piece1.canvas.getContext('2d');
-        var context2 = piece2.canvas.getContext('2d');
+        var pimpochkaSize = side1.attachSize;
 
-        var piecesPositionOffset,
-            piece1PositionOffest = 0,
-            piece2PositionOffest = 0;
 
-        var pimpochkaSize = side1.attachSize,
-            pimpochkaSizeX, pimpochkaSizeY;
-
-        var canvas = document.createElement('canvas');
-
-        var data1, data2, data1Attach, data2Attach;
+        var newWidth, newHeight;
 
         if (connectTopAndBottom) {
-            pimpochkaSizeX = piece1.width;
-            pimpochkaSizeY = pimpochkaSize;
-
-            piecesPositionOffset = side1.offsetX - side2.offsetX,
-
-            canvas.width = Math.max(side1.offsetX, side2.offsetX) // left offset
+            newWidth = Math.max(side1.offsetX, side2.offsetX) // left offset
             + Math.max(width1 - side1.offsetX, width2 - side2.offsetX); // right offset;;
 
-            canvas.height = height1 + height2 - pimpochkaSize;
-
-            data1 = context1.getImageData(0, 0, width1, height1 - pimpochkaSize);
-            data2 = context2.getImageData(0, pimpochkaSize, width2, height2 - pimpochkaSize);
-
-            data1Attach = context1.getImageData(piece1.offsetX, height1 - pimpochkaSize, piece1.width, pimpochkaSize);
-            data2Attach = context2.getImageData(piece2.offsetX, 0, piece2.width, pimpochkaSize);
-
-            var attachWidth = piece1.width;
+            newHeight = height1 + height2 - pimpochkaSize;
 
         } else {
-            pimpochkaSizeX = pimpochkaSize;
-            pimpochkaSizeY = piece1.height;
+            newWidth = width1 + width2 - pimpochkaSize;
 
-            piecesPositionOffset = side1.offsetY - side2.offsetY,
-
-            canvas.width = width1 + width2 - pimpochkaSize;
-
-            canvas.height = Math.max(side1.offsetY, side2.offsetY) // top offset
+            newHeight = Math.max(side1.offsetY, side2.offsetY) // top offset
             + Math.max(height1 - side1.offsetY, height2 - side2.offsetY); // bottom offset;
 
-
-            data1 = context1.getImageData(0, 0, width1 - pimpochkaSize, height1);
-            data2 = context2.getImageData(pimpochkaSize, 0, width2 - pimpochkaSize, height2);
-
-            data1Attach = context1.getImageData(width1 - pimpochkaSize, piece1.offsetY, pimpochkaSize, piece1.height);
-            data2Attach = context2.getImageData(0, piece2.offsetY, pimpochkaSize, piece2.height);
-
-            attachWidth = pimpochkaSize;
         }
 
-        if (piecesPositionOffset < 0) {
-            piece1PositionOffest = -piecesPositionOffset;
-        } else if (piecesPositionOffset > 0) {
-            piece2PositionOffest = piecesPositionOffset;
-        }
+        var newLeft = parseInt(piece2.container.style.left, 10) - parseInt(piece1.container.style.left, 10);
+        var newTop = parseInt(piece2.container.style.top, 10) - parseInt(piece1.container.style.top, 10);
 
-        for (var x = 0; x < pimpochkaSizeX; x++) {
-            for (var y = 0; y < pimpochkaSizeY; y++) {
-                var coord = (x + y*attachWidth) * 4;
+        $.each(piece2.canvas, function() {
+            this.style.top = (parseInt(this.style.top, 10) + newTop) + 'px';
+            this.style.left = (parseInt(this.style.left, 10) + newLeft) + 'px';
+            piece1.container.appendChild(this);
 
-                if (data1Attach.data[coord + 3] === 0) {
-                    data1Attach.data[coord + 0] = data2Attach.data[coord + 0];
-                    data1Attach.data[coord + 1] = data2Attach.data[coord + 1];
-                    data1Attach.data[coord + 2] = data2Attach.data[coord + 2];
-                    data1Attach.data[coord + 3] = data2Attach.data[coord + 3];
+            piece1.canvas.push(this);
+        });
+        piece2.container.parentNode.removeChild(piece2.container);
+
+        $.each(piece2.neighbours, function(key) {
+
+            $.each(this, function(){
+                this.offsetX += newLeft;
+                this.offsetY += newTop;
+
+                piece1.neighbours[key].push(this);
+            });
+        });
+
+        if (piece1.neighbours['left'] && piece1.neighbours['right']) {
+            for (var i = 0; i < piece1.neighbours['left'].length; i++) {
+                var neighbourLeft = piece1.neighbours['left'][i];
+
+                for (var k = 0; k < piece1.neighbours['right'].length; k++) {
+                    var neighbourRight = piece1.neighbours['right'][k];
+
+                    if (neighbourLeft.offsetX === neighbourRight.offsetX
+                        && neighbourLeft.offsetY === neighbourRight.offsetY) {
+                        piece1.neighbours['left'].splice(i, 1);
+                        piece1.neighbours['right'].splice(k, 1);
+                    }
                 }
             }
         }
 
-        if (connectTopAndBottom) {
-            canvas.getContext('2d').putImageData(data1, piece1PositionOffest, 0);
-            canvas.getContext('2d').putImageData(data1Attach, Math.max(piece1.offsetX, piece2.offsetX), height1 - pimpochkaSize);
-            canvas.getContext('2d').putImageData(data2, piece2PositionOffest, height1);
+        if (piece1.neighbours['top'] && piece1.neighbours['bottom']) {
+            for (var i = 0; i < piece1.neighbours['top'].length; i++) {
+                var neighbourLeft = piece1.neighbours['top'][i];
 
-        } else {
-            canvas.getContext('2d').putImageData(data1, 0, piece1PositionOffest);
-            canvas.getContext('2d').putImageData(data1Attach, width1 - pimpochkaSize, Math.max(piece1.offsetY, piece2.offsetY));
-            canvas.getContext('2d').putImageData(data2, width1, piece2PositionOffest);
+                for (var k = 0; k < piece1.neighbours['bottom'].length; k++) {
+                    var neighbourRight = piece1.neighbours['bottom'][k];
+
+                    if (neighbourLeft.offsetX === neighbourRight.offsetX
+                        && neighbourLeft.offsetY === neighbourRight.offsetY) {
+                        piece1.neighbours['top'].splice(i, 1);
+                        piece1.neighbours['bottom'].splice(k, 1);
+                    }
+                }
+            }
         }
 
 
-            document.body.appendChild(canvas);
-
-        return {
-            canvas: canvas
-        };
+        return piece1;
     },
 
     getRandomJigsaw: function() {

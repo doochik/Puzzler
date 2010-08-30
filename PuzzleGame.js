@@ -19,7 +19,7 @@ function PuzzleGame($node, url, countX, countY) {
                 container.style.top = y + 'px';
                 container.style.left = x + 'px';
 
-                x += parseInt(pieces[j][i].canvas[0].width, 10) + 20;
+                x += parseInt(container.childNodes[0].width, 10) + 20;
                 $(container).bind('mousedown', {x: i, y: j, container: container}, startDrag);
             }
 
@@ -28,15 +28,15 @@ function PuzzleGame($node, url, countX, countY) {
         }
     });
 
-    var startX , startY, startTop, startLeft, canvas, blockStart = false;
+    var blockStart = false;
 
     function startDrag(e) {
         if (!blockStart) {
-            startX = e.clientX;
-            startY = e.clientY;
+            e.data.startX = e.clientX;
+            e.data.startY = e.clientY;
 
-            startTop = parseInt(this.style.top, 10);
-            startLeft = parseInt(this.style.left, 10);
+            e.data.startLeft = parseInt(this.style.left, 10);
+            e.data.startTop = parseInt(this.style.top, 10);
 
             $(document).bind('mousemove.movepuzzle', e.data, continueDrag);
             $(document).bind('mouseup.movepuzzle', e.data, stopDrag);
@@ -44,79 +44,68 @@ function PuzzleGame($node, url, countX, countY) {
     }
 
     function continueDrag(e) {
-        // new canvas position
-        var top = (startTop + (e.clientY - startY)),
-            left = (startLeft + (e.clientX - startX));
+        var data = e.data;
 
-        e.data.container.style.top = top + 'px';
-        e.data.container.style.left = left + 'px';
-
-
+        data.container.style.top = (data.startTop + (e.clientY - data.startY)) + 'px';
+        data.container.style.left = (data.startLeft + (e.clientX - data.startX)) + 'px';
     }
-
-    //TODO: если большой кусок стыкуется с маленьким, то потом ничего не стыкуется 
 
     function stopDrag(e) {
         $(document).unbind('.movepuzzle');
 
-        var piece = puzzles[e.data.y][e.data.x],
-            top = parseInt(piece.container.style.top, 10),
-            left = parseInt(piece.container.style.left, 10);
+        var movedElement = puzzles[e.data.y][e.data.x],
+            movedElementContainer = movedElement.container,
+            top = parseInt(movedElementContainer.style.top, 10),
+            left = parseInt(movedElementContainer.style.left, 10);
 
-        var exit = false;
+        for (var pieceIndex in movedElement.pieces) {
+            var piece = movedElement.pieces[pieceIndex];
 
-        $.each(piece.neighbours, function(key) {
+            for (var myAttachSideName in piece.neighbours) {
+                var myAttachSide = piece.neighbours[myAttachSideName];
 
-            var mySide = this;
-            $.each(this, function(myIndex) {
+                var neighbour = puzzles[myAttachSide.attachToY][myAttachSide.attachToX];
 
-                var myAttachSide = this,
-                    neighbour = puzzles[myAttachSide.attachToY][myAttachSide.attachToX],
-                    neighbourContainer = neighbour.container,
+                var neighbourContainer = neighbour.container,
                     neighbourLeft = parseInt(neighbourContainer.style.left, 10),
                     neighbourTop = parseInt(neighbourContainer.style.top, 10);
 
-                var ret = $.each(neighbour.neighbours[myAttachSide.attachToSide], function(neighbourIndex){
+                var neighbourSide = neighbour.pieces[Puzz.pieceKey(myAttachSide.attachToX, myAttachSide.attachToY)].neighbours[myAttachSide.attachToSide],
+                    neighbourX = neighbourSide.offsetX + neighbourLeft,
+                    neighbourY = neighbourSide.offsetY + neighbourTop;
 
-                    var neighbourSide = this,
-                        neighbourX = neighbourSide.offsetX + neighbourLeft,
-                        neighbourY = neighbourSide.offsetY + neighbourTop;
+                var distance = Math.sqrt(Math.pow((myAttachSide.offsetX + left) - neighbourX, 2) + Math.pow((myAttachSide.offsetY + top) - neighbourY, 2));
 
-                    var distance = Math.sqrt(Math.pow((myAttachSide.offsetX + left) - neighbourX, 2) + Math.pow((myAttachSide.offsetY + top) - neighbourY, 2));
+                if (distance < 20) {
+                    blockStart = true;
+                    $(movedElementContainer).animate({
+                        left: neighbourX - myAttachSide.offsetX,
+                        top: neighbourY - myAttachSide.offsetY
+                    }, function() {
+                        piecesCount--;
+                        var newElement;
+                        // piece1 must be higher/lefter than piece2
+                        if (myAttachSideName === 'top' || myAttachSideName === 'left') {
+                            newElement = Puzz.mergePieces(neighbour, Puzz.pieceKey(myAttachSide.attachToX, myAttachSide.attachToY), myAttachSide.attachToSide, movedElement);
 
-                    if (distance < 20) {
-                        blockStart = true;
-                        $(piece.container).animate({
-                            left: neighbourX - myAttachSide.offsetX,
-                            top: neighbourY - myAttachSide.offsetY
-                        }, function() {
-                            piecesCount--;
-                            var newElement = Puzz.mergePieces(piece, myIndex, neighbour, neighbourIndex, key);
+                        } else {
+                            newElement = Puzz.mergePieces(movedElement, pieceIndex, myAttachSideName, neighbour);
+                        }
 
-                            for (var i = 0, j = newElement.position.length; i < j; i++) {
-                                var pos = newElement.position[i];
-                                puzzles[pos[0]][pos[1]] = newElement;
-                            }
+                        for (var key in newElement.pieces) {
+                            key = Puzz.pieceKeyToArray(key);
+                            puzzles[key[0]][key[1]] = newElement;
+                        }
 
-                            if (piecesCount === 1) {
-                                alert('ta-dam!');
-                            }
-                            blockStart = false;
-                        });
-                        exit = true;
-                        return false;
-                    }
-                });
-
-                if (exit) {
-                    return false;
+                        if (piecesCount === 1) {
+                            alert('ta-dam!');
+                        }
+                        blockStart = false;
+                    });
+                    return;
                 }
-            });
-
-            if (exit) {
-                return false;
             }
-        });
+        }
     }
 
 }

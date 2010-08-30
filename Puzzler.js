@@ -117,10 +117,10 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     );
 
                 var neighbours = {
-                    left: [],
+                    /*left: [],
                     right: [],
                     top: [],
-                    bottom: []
+                    bottom: []*/
                 },
                     relationSide;
 
@@ -131,7 +131,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x;
                     relationSide.attachToY = y - 1;
                     relationSide.attachSize = cutter.getSize(pieceHeight);
-                    neighbours['top'].push(relationSide);
+                    neighbours['top'] = relationSide;
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
@@ -142,7 +142,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x;
                     relationSide.attachToY = y - 1;
                     relationSide.attachSize = cutter.getSize(pieceHeight);
-                    neighbours['top'].push(relationSide);
+                    neighbours['top'] = relationSide;
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
@@ -154,7 +154,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x + 1;
                     relationSide.attachToY = y;
                     relationSide.attachSize = cutter.getSize(pieceWidth);
-                    neighbours['right'].push(relationSide);
+                    neighbours['right'] = relationSide;
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
@@ -165,7 +165,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x + 1;
                     relationSide.attachToY = y;
                     relationSide.attachSize = cutter.getSize(pieceWidth);
-                    neighbours['right'].push(relationSide);
+                    neighbours['right'] = relationSide;
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
@@ -178,7 +178,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x;
                     relationSide.attachToY = y + 1;
                     relationSide.attachSize = cutter.getSize(pieceHeight);
-                    neighbours['bottom'].push(relationSide);
+                    neighbours['bottom'] = relationSide;
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
@@ -189,7 +189,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToX = x;
                     relationSide.attachToY = y + 1;
                     relationSide.attachSize = cutter.getSize(pieceHeight);
-                    neighbours['bottom'].push(relationSide);
+                    neighbours['bottom'] = relationSide;
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
@@ -202,7 +202,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToY = y;
                     relationSide.attachSize = cutter.getSize(pieceWidth);
 
-                    neighbours['left'].push(relationSide);
+                    neighbours['left'] = relationSide;
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
@@ -214,7 +214,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachToY = y;
                     relationSide.attachSize = cutter.getSize(pieceWidth);
 
-                    neighbours['left'].push(relationSide);
+                    neighbours['left'] = relationSide;
 
                     cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
@@ -226,17 +226,19 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
                 canvas.style.cssText = 'position:absolute;top:0;left:0';
 
-                pieces[y][x] = {
-                    canvas: [canvas],
-                    position: [
-                        [y, x]
-                    ],
-                    container: container,
+                var piece = {};
+                piece[self.pieceKey(x, y)] = {
+                    canvas: canvas,
                     width: pieceWidth,
                     height: pieceHeight,
                     offsetX: pieceNullX,
                     offsetY: pieceNullY,
                     neighbours: neighbours
+                };
+
+                pieces[y][x] = {
+                    pieces: piece,
+                    container: container
                 }
             }
         }
@@ -276,67 +278,44 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 Puzzler.prototype = {
 
     /**
+     *
+     * @param x
+     * @param y
+     */
+    pieceKey: function(x, y) {
+        return y + '-' + x;
+    },
+
+    pieceKeyToArray: function(key) {
+        return key.split('-');
+    },
+
+    /**
      * Merge two pieces into one container.
      * It's simpler than merge two canvas into one.
-     * @param piece1
-     * @param piece2
+     * @param container1
+     * @param container2
      * @param {String} piece1ConnectingSide
      * @return {Canvas}
      */
-    mergePieces: function(piece1, piece1Index, piece2, piece2Index, piece1ConnectingSide) {
-
-        var tempPiece4Change;
-        var tempPieceIndex4Change;
-
+    mergePieces: function(container1, piece1Index, piece1ConnectingSide, container2) {
         var side1,
             side2;
 
-        var connectTopAndBottom;
+        var connectTopAndBottom = piece1ConnectingSide === 'bottom';
 
-        // piece 1 must be higher/righter then piece2
-        switch(piece1ConnectingSide) {
-            // piece1 connecting to piece2 by top side (it's lower), so we have to change piece <-> piece2
-            case 'top':
-                tempPiece4Change = piece1;
-                tempPieceIndex4Change = piece1Index;
+        var piece1 = container1.pieces[piece1Index];//TODO: rename piece1Connector
+        side1 = piece1.neighbours[piece1ConnectingSide];
 
-                piece1 = piece2;
-                piece1Index = piece2Index;
-
-                piece2 = tempPiece4Change;
-                piece2Index = tempPieceIndex4Change;
-
-            case 'bottom':
-                side1 = piece1.neighbours['bottom'].splice(piece1Index, 1)[0];
-                side2 = piece2.neighbours['top'].splice(piece2Index, 1)[0];
-
-                connectTopAndBottom = true;
-                break;
-
-            // same situation, piece1 is lefter than piece2
-            case 'left':
-                tempPiece4Change = piece1;
-                tempPieceIndex4Change = piece1Index;
-
-                piece1 = piece2;
-                piece1Index = piece2Index;
-
-                piece2 = tempPiece4Change;
-                piece2Index = tempPieceIndex4Change;
-
-            case 'right':
-                side1 = piece1.neighbours['right'].splice(piece1Index, 1)[0];
-                side2 = piece2.neighbours['left'].splice(piece2Index, 1)[0];
-
-                connectTopAndBottom = false;
-        }
+        var piece2 = container2.pieces[this.pieceKey(side1.attachToX, side1.attachToY)];
+        side2 = piece2.neighbours[side1.attachToSide];
 
         var width1 = piece1.canvas.width,
             width2 = piece2.canvas.width,
             height1 = piece1.canvas.height,
             height2 = piece2.canvas.height;
 
-        var pimpochkaSize = side1.attachSize;
+        var tabSize = side1.attachSize;
 
 
         var newWidth, newHeight;
@@ -345,69 +324,60 @@ Puzzler.prototype = {
             newWidth = Math.max(side1.offsetX, side2.offsetX) // left offset
             + Math.max(width1 - side1.offsetX, width2 - side2.offsetX); // right offset;;
 
-            newHeight = height1 + height2 - pimpochkaSize;
+            newHeight = height1 + height2 - tabSize;
 
         } else {
-            newWidth = width1 + width2 - pimpochkaSize;
+            newWidth = width1 + width2 - tabSize;
 
             newHeight = Math.max(side1.offsetY, side2.offsetY) // top offset
             + Math.max(height1 - side1.offsetY, height2 - side2.offsetY); // bottom offset;
 
         }
 
-        var newLeft = parseInt(piece2.container.style.left, 10) - parseInt(piece1.container.style.left, 10);
-        var newTop = parseInt(piece2.container.style.top, 10) - parseInt(piece1.container.style.top, 10);
+        var newLeft = parseInt(container2.container.style.left, 10) - parseInt(container1.container.style.left, 10);
+        var newTop = parseInt(container2.container.style.top, 10) - parseInt(container1.container.style.top, 10);
 
-        $.each(piece2.canvas, function() {
-            this.style.top = (parseInt(this.style.top, 10) + newTop) + 'px';
-            this.style.left = (parseInt(this.style.left, 10) + newLeft) + 'px';
-            piece1.container.appendChild(this);
+        $.each(container2.pieces, function(key) {
+            this.canvas.style.top = (parseInt(this.canvas.style.top, 10) + newTop) + 'px';
+            this.canvas.style.left = (parseInt(this.canvas.style.left, 10) + newLeft) + 'px';
+            container1.container.appendChild(this.canvas);
 
-            piece1.canvas.push(this);
-        });
-        piece2.container.parentNode.removeChild(piece2.container);
-
-        $.each(piece2.neighbours, function(key) {
-
-            $.each(this, function(){
+            $.each(this.neighbours, function(key) {
                 this.offsetX += newLeft;
                 this.offsetY += newTop;
-
-                piece1.neighbours[key].push(this);
             });
+
+            container1.pieces[key] = this;
         });
+        container2.container.parentNode.removeChild(container2.container);
 
-        for (var i = 0; i < piece1.neighbours['left'].length; i++) {
-            var neighbourLeft = piece1.neighbours['left'][i];
+        this._fixDuplicateConnectors(container1, 'right', 'left');
+        this._fixDuplicateConnectors(container1, 'bottom', 'top');
 
-            for (var k = 0; k < piece1.neighbours['right'].length; k++) {
-                var neighbourRight = piece1.neighbours['right'][k];
+        return container1;
+    },
 
-                if (neighbourLeft.offsetX === neighbourRight.offsetX
-                    && neighbourLeft.offsetY === neighbourRight.offsetY) {
-                    piece1.neighbours['left'].splice(i, 1);
-                    piece1.neighbours['right'].splice(k, 1);
+    _fixDuplicateConnectors: function(container1, checkSide, connectToSide) {
+        for (var piece1Index in container1.pieces) {
+            var piece1 = container1.pieces[piece1Index],
+                piece1Connector = piece1.neighbours[checkSide];
+
+            if (piece1Connector) {
+                for (var piece2Index in container1.pieces) {
+                    var piece2 = container1.pieces[piece2Index],
+                        piece2Connector = piece2.neighbours[connectToSide];
+
+                    if (piece2Connector) {
+                        if (piece1Connector.offsetX === piece2Connector.offsetX
+                            && piece1Connector.offsetY === piece2Connector.offsetY) {
+
+                            delete piece1.neighbours[checkSide];
+                            delete piece2.neighbours[connectToSide];
+                        }
+                    }
                 }
             }
         }
-
-        for (var i = 0; i < piece1.neighbours['top'].length; i++) {
-            var neighbourTop = piece1.neighbours['top'][i];
-
-            for (var k = 0; k < piece1.neighbours['bottom'].length; k++) {
-                var neighbourBottom = piece1.neighbours['bottom'][k];
-
-                if (neighbourTop.offsetX === neighbourBottom.offsetX
-                    && neighbourTop.offsetY === neighbourBottom.offsetY) {
-                    piece1.neighbours['top'].splice(i, 1);
-                    piece1.neighbours['bottom'].splice(k, 1);
-                }
-            }
-        }
-
-        piece1.position = piece1.position.concat(piece2.position);
-
-        return piece1;
     },
 
     getRandomJigsaw: function() {

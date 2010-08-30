@@ -2,19 +2,14 @@
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>Puzzle example</title>
-    <script type="text/javascript" src="//yandex.st/jquery/1.4.2/jquery.js"></script>
+    <title>Puzzle game example</title>
+    <script type="text/javascript" src="/jquery.js"></script>
     <script type="text/javascript" src="Puzzler.js"></script>
     <script type="text/javascript" src="PuzzleGame.js"></script>
     <style type="text/css">
         body
         {
-            background: #aaa;    
-        }
-
-        .puzzle
-        {
-            border: 1px solid #000;
+            background: #ccc;    
         }
 
         .dest
@@ -22,20 +17,13 @@
             width: 100%;
             height: 330px;
             float:left;
-            border: 1px solid #F00;
+            /*border: 1px solid #F00;*/
             position: relative;
-        }
-
-        .dest canvas
-        {
-            /*float:left;*/
-            position: absolute;
-            /*border: 1px solid #000;*/
         }
     </style>
 </head>
 <body>
-<form action="" id="form">
+<form action="" id="form" style="display:none">
     <fieldset>
         URL: <input type="text" name="url" value="/img.jpg"/>
         xCount: <input type="text" name="count-x" value="5"/>
@@ -45,19 +33,30 @@
     </fieldset>
 </form>
 <script type="text/javascript">
-    $('#form').submit(function() {
-        var form = this;
+    if (Puzzler.support()) {
+        var form = document.getElementById('form');
+        form.style.display = 'block';
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-        var url = this.url.value;
-        var countX = this['count-x'].value;
-        var countY = this['count-y'].value;
+            this.style.display = 'none';
 
-        new PuzzleGame($('#dest'), url, countY, countX);
+            var url = this.url.value;
+            var countX = this['count-x'].value;
+            var countY = this['count-y'].value;
 
-        return false;
-    });
+
+            var dest = document.createElement('div');
+            dest.id = 'dest';
+            dest.className = 'dest';
+            dest.innerHTML = 'Loading...';
+            document.body.appendChild(dest);
+
+            new PuzzleGame(dest, url, countY, countX);
+        }, false);
+    } else {
+        document.body.innerHTML = '<h1>Sorry, but you browser doesn\'t support "Canvas". Please, use modern browser such as Firefox, Opera, Safari or Chrome</h1>';
+    }
 </script>
-<img src="img.jpg" alt=""/>
-<div class="dest" id="dest"></div>
 </body>
 </html>

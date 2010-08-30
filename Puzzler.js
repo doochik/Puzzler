@@ -135,7 +135,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceHeight);
                     neighbours['top'] = relationSide;
 
-                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
                 } else if (pieceRelations[y][x][0] === true) {
                     relationSide = cutter.male_0(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
@@ -146,7 +146,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceHeight);
                     neighbours['top'] = relationSide;
 
-                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
                 if (pieceRelations[y][x][1] === false) {
@@ -158,7 +158,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceWidth);
                     neighbours['right'] = relationSide;
 
-                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
                 } else if (pieceRelations[y][x][1] === true) {
                     relationSide = cutter.male_1(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
@@ -169,7 +169,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceWidth);
                     neighbours['right'] = relationSide;
 
-                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
                 }
 
@@ -182,7 +182,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceHeight);
                     neighbours['bottom'] = relationSide;
 
-                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
                 } else if (pieceRelations[y][x][2] === true) {
                     relationSide = cutter.male_2(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
@@ -193,7 +193,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceHeight);
                     neighbours['bottom'] = relationSide;
 
-                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
                 if (pieceRelations[y][x][3] === false) {
@@ -206,7 +206,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
                     neighbours['left'] = relationSide;
 
-                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
                 } else if (pieceRelations[y][x][3] === true) {
                     relationSide = cutter.male_3(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
@@ -218,7 +218,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
                     neighbours['left'] = relationSide;
 
-                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
                 var container = document.createElement('div');
@@ -488,6 +488,7 @@ Puzzler.prototype = {
              */
             _size: 0.2,
 
+            //TODO: debug function
             drawPoint: function(canvas, x, y) {
                 var canvasContext = canvas.getContext('2d');
 

@@ -4,3 +4,9 @@ Class under development.
 
 Usage:
 new Puzzler('http://imagehost.com/path_to_image.jpg', 5, 5);
+
+
+
+=== Chanelog ===
+0.1 (30.08.2010)
+First version. It's just work. Code is not optimized.

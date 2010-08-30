@@ -1,10 +1,10 @@
-function PuzzleGame($node, url, countX, countY) {
+function PuzzleGame(node, url, countX, countY) {
     var puzzles,
 
         piecesCount = countX*countY;
 
     var Puzz = new Puzzler(url, countX, countY, function(pieces) {
-
+        node.innerHTML = 'Ready!';
         puzzles = pieces;
 
         var x = 0, y = 0;
@@ -14,13 +14,13 @@ function PuzzleGame($node, url, countX, countY) {
             
                 var container = pieces[j][i].container;
 
-                $node.append(container);
+                node.appendChild(container);
 
                 container.style.top = y + 'px';
                 container.style.left = x + 'px';
 
                 x += parseInt(container.childNodes[0].width, 10) + 20;
-                $(container).bind('mousedown', {x: i, y: j, container: container}, startDrag);
+                $(container).bind('mousedown.movepuzzle1', {x: i, y: j, container: container}, startDrag);
             }
 
             x = 0;
@@ -98,7 +98,15 @@ function PuzzleGame($node, url, countX, countY) {
                         }
 
                         if (piecesCount === 1) {
-                            alert('ta-dam!');
+                            var container = puzzles[0][0].container;
+                            $(container).unbind('.movepuzzle1');
+                            puzzles = null;
+                            Puzz = null;
+                            container.style.top = 0;
+                            container.style.left = 0;
+                            var h1 = document.createElement('h1');
+                            h1.innerHTML = 'Done!';
+                            document.body.appendChild(h1);
                         }
                         blockStart = false;
                     });

@@ -649,3 +649,15 @@ Puzzler.prototype = {
 function getIdxForCanvasData(canvas, x, y) {
         return (x + y * canvas.width) * 4;
     }
+
+/**
+ * Check for canvas support
+ * @static
+ * @memberOf Puzzler
+ * @name Puzzler.support
+ * @return {Boolean}
+ */
+Puzzler.support = function() {
+    var canvas = document.createElement('canvas');
+    return canvas && canvas.getContext;
+};

@@ -4,3 +4,5 @@
 4) documentation
 5) clever z-index
 6) remove jQuery animate to minify dependencies
+
+7) ??? maybe create separated classes for puzzle piece and canvas ??? "merge", and some getters can be methods of this class

@@ -14,13 +14,16 @@ function PuzzleGame(node, url, countX, countY) {
             
                 var container = pieces[j][i].container;
 
+                container.setAttribute('data-puzzle-x', i);
+                container.setAttribute('data-puzzle-y', j);
+
                 node.appendChild(container);
 
                 container.style.top = y + 'px';
                 container.style.left = x + 'px';
 
                 x += parseInt(container.childNodes[0].width, 10) + 20;
-                $(container).bind('mousedown.movepuzzle1', {x: i, y: j, container: container}, startDrag);
+                container.addEventListener('mousedown', startDrag, false);
             }
 
             x = 0;
@@ -30,30 +33,36 @@ function PuzzleGame(node, url, countX, countY) {
 
     var blockStart = false;
 
+    var startX, startY, startLeft, startTop, movedContainer;
+
     function startDrag(e) {
         if (!blockStart) {
-            e.data.startX = e.clientX;
-            e.data.startY = e.clientY;
+            startX = e.clientX;
+            startY = e.clientY;
 
-            e.data.startLeft = parseInt(this.style.left, 10);
-            e.data.startTop = parseInt(this.style.top, 10);
+            startLeft = parseInt(this.style.left, 10);
+            startTop = parseInt(this.style.top, 10);
 
-            $(document).bind('mousemove.movepuzzle', e.data, continueDrag);
-            $(document).bind('mouseup.movepuzzle', e.data, stopDrag);
+            movedContainer = this;
+
+            document.addEventListener('mousemove', continueDrag, false);
+            document.addEventListener('mouseup', stopDrag, false);
         }
     }
 
     function continueDrag(e) {
-        var data = e.data;
-
-        data.container.style.top = (data.startTop + (e.clientY - data.startY)) + 'px';
-        data.container.style.left = (data.startLeft + (e.clientX - data.startX)) + 'px';
+        movedContainer.style.top = (startTop + (e.clientY - startY)) + 'px';
+        movedContainer.style.left = (startLeft + (e.clientX - startX)) + 'px';
     }
 
     function stopDrag(e) {
-        $(document).unbind('.movepuzzle');
+        document.removeEventListener('mousemove', continueDrag, false);
+        document.removeEventListener('mouseup', stopDrag, false);
 
-        var movedElement = puzzles[e.data.y][e.data.x],
+        var x = movedContainer.getAttribute('data-puzzle-x');
+        var y = movedContainer.getAttribute('data-puzzle-y');
+
+        var movedElement = puzzles[y][x],
             movedElementContainer = movedElement.container,
             top = parseInt(movedElementContainer.style.top, 10),
             left = parseInt(movedElementContainer.style.left, 10);
@@ -99,7 +108,7 @@ function PuzzleGame(node, url, countX, countY) {
 
                         if (piecesCount === 1) {
                             var container = puzzles[0][0].container;
-                            $(container).unbind('.movepuzzle1');
+                            container.removeEventListener('mousedown', startDrag, false);
                             puzzles = null;
                             Puzz = null;
                             container.style.top = 0;
@@ -114,6 +123,8 @@ function PuzzleGame(node, url, countX, countY) {
                 }
             }
         }
+
+        movedContainer = null;
     }
 
 }

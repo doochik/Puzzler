@@ -339,18 +339,22 @@ Puzzler.prototype = {
         var newLeft = parseInt(container2.container.style.left, 10) - parseInt(container1.container.style.left, 10);
         var newTop = parseInt(container2.container.style.top, 10) - parseInt(container1.container.style.top, 10);
 
-        $.each(container2.pieces, function(key) {
-            this.canvas.style.top = (parseInt(this.canvas.style.top, 10) + newTop) + 'px';
-            this.canvas.style.left = (parseInt(this.canvas.style.left, 10) + newLeft) + 'px';
-            container1.container.appendChild(this.canvas);
+        for (var mergePieceIndex in container2.pieces) {
+            var mergePiece = container2.pieces[mergePieceIndex];
 
-            $.each(this.neighbours, function(key) {
-                this.offsetX += newLeft;
-                this.offsetY += newTop;
-            });
+            mergePiece.canvas.style.top = (parseInt(mergePiece.canvas.style.top, 10) + newTop) + 'px';
+            mergePiece.canvas.style.left = (parseInt(mergePiece.canvas.style.left, 10) + newLeft) + 'px';
+            container1.container.appendChild(mergePiece.canvas);
 
-            container1.pieces[key] = this;
-        });
+            for (var mergePieceNeighbourIndex in mergePiece.neighbours) {
+                var mergePieceNeighbour = mergePiece.neighbours[mergePieceNeighbourIndex];
+                mergePieceNeighbour.offsetX += newLeft;
+                mergePieceNeighbour.offsetY += newTop;
+            }
+
+            container1.pieces[mergePieceIndex] = mergePiece;
+        }
+
         container2.container.parentNode.removeChild(container2.container);
 
         this._fixDuplicateConnectors(container1, 'right', 'left');

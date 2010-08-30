@@ -3,3 +3,4 @@
 3) add another types of jigsaws
 4) documentation
 5) clever z-index
+6) remove jQuery animate to minify dependencies

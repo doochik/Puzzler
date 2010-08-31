@@ -89,9 +89,7 @@ function PuzzleGame(node, url, countX, countY) {
 
                 if (distance < 20) {
                     blockStart = true;
-                    //movedElementContainer.style.left = (neighbourX - myAttachSide.offsetX) + 'px';
-                    //movedElementContainer.style.top = (neighbourY - myAttachSide.offsetY) + 'px';
-                    $(movedElementContainer).animate({
+                    animate(movedElementContainer, {
                         left: neighbourX - myAttachSide.offsetX,
                         top: neighbourY - myAttachSide.offsetY
                     }, function() {
@@ -129,6 +127,28 @@ function PuzzleGame(node, url, countX, countY) {
         }
 
         movedContainer = null;
+    }
+
+    //TODO: safari animation
+    function animate(div, css, callback) {
+        doAnimate();
+
+        function doAnimate() {
+            var setTimer = false;
+            for (var property in css) {
+                var value = parseInt(div.style[property], 10);
+                if (value != css[property]) {
+                    div.style[property] = (value + (value < css[property] ? 1 : -1)) + 'px';
+                    setTimer = true;
+                }
+            }
+
+            if (setTimer) {
+                window.setTimeout(doAnimate, 25);
+            } else {
+                callback();
+            }
+        }
     }
 
 }

@@ -29,6 +29,8 @@ function PuzzleGame(node, url, countX, countY) {
             x = 0;
             y += 100;
         }
+
+        init();
     });
 
     var blockStart = false;
@@ -87,6 +89,8 @@ function PuzzleGame(node, url, countX, countY) {
 
                 if (distance < 20) {
                     blockStart = true;
+                    //movedElementContainer.style.left = (neighbourX - myAttachSide.offsetX) + 'px';
+                    //movedElementContainer.style.top = (neighbourY - myAttachSide.offsetY) + 'px';
                     $(movedElementContainer).animate({
                         left: neighbourX - myAttachSide.offsetX,
                         top: neighbourY - myAttachSide.offsetY
@@ -132,3 +136,50 @@ function PuzzleGame(node, url, countX, countY) {
 PuzzleGame.prototype = function() {
     
 };
+
+/**
+ * @see http://ross.posterous.com/2008/08/19/iphone-touch-events-in-javascript
+ */
+function touchHandler(event)
+{
+    var touches = event.changedTouches,
+        first = touches[0],
+        type = "";
+
+
+    // don't block resize, scroll and other gestures
+    // drag and drop must work only on canvas elements
+	if (touches.length > 1 || first.target.nodeName !== 'CANVAS') {
+		return;
+	}
+
+         switch(event.type)
+    {
+        case "touchstart": type = "mousedown"; break;
+        case "touchmove":  type="mousemove"; break;
+        case "touchend":   type="mouseup"; break;
+        default: return;
+    }
+
+             //initMouseEvent(type, canBubble, cancelable, view, clickCount,
+    //           screenX, screenY, clientX, clientY, ctrlKey,
+    //           altKey, shiftKey, metaKey, button, relatedTarget);
+
+    var simulatedEvent = document.createEvent("MouseEvent");
+    simulatedEvent.initMouseEvent(type, true, true, window, 1,
+                              first.screenX, first.screenY,
+                              first.clientX, first.clientY, false,
+                              false, false, false, 0/*left*/, null);
+
+    first.target.dispatchEvent(simulatedEvent);
+    event.preventDefault();
+    event.stopPropagation();
+}
+
+function init()
+{
+    document.addEventListener("touchstart", touchHandler, true);
+    document.addEventListener("touchmove", touchHandler, true);
+    document.addEventListener("touchend", touchHandler, true);
+    document.addEventListener("touchcancel", touchHandler, true);
+}

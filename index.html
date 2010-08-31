@@ -3,10 +3,12 @@
 <html>
 <head>
     <title>Puzzle game example</title>
-    <script type="text/javascript" src="/jquery.js"></script>
+    <script type="text/javascript" src="//yandex.st/jquery/1.4.2/jquery.min.js"></script>
     <script type="text/javascript" src="Puzzler.js"></script>
     <script type="text/javascript" src="PuzzleGame.js"></script>
     <style type="text/css">
+        /** block select on Mobile Safari **/
+        * { -webkit-user-select: none; }
         body
         {
             background: #ccc;    
@@ -25,7 +27,7 @@
 <body>
 <form action="" id="form" style="display:none">
     <fieldset>
-        URL: <input type="text" name="url" value="/img.jpg"/>
+        URL: <input type="text" name="url" value="img.jpg"/>
         xCount: <input type="text" name="count-x" value="5"/>
         YCount: <input type="text" name="count-y" value="5"/>
 

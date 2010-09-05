@@ -65,7 +65,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     pieceRelations[y][x][3] = x === 0 ? null : relation(); //right
                 }
 
-                var cutter = self.getRandomJigsaw();
+                var cutter;
                 var originalX = pieceWidth * x;
                 var originalY = pieceHeight * y;
                 var width = pieceWidth;
@@ -79,24 +79,28 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                 canvas.width = pieceWidth;
                 canvas.height = pieceHeight;
 
-                if (pieceRelations[y][x][0] === true) {
+                if (pieceRelations[y][x][0] && pieceRelations[y][x][0].type === true) {
+                    cutter = pieceRelations[y][x][0].jigsaw;
                     canvas.height += cutter.getSize(pieceHeight);
                     originalY -= cutter.getSize(pieceHeight);
                     height += cutter.getSize(pieceHeight);
                     pieceNullY += cutter.getSize(pieceHeight);
                 }
 
-                if (pieceRelations[y][x][1] === true) {
+                if (pieceRelations[y][x][1] && pieceRelations[y][x][1].type === true) {
+                    cutter = pieceRelations[y][x][1].jigsaw;
                     canvas.width += cutter.getSize(pieceWidth);
                     width += cutter.getSize(pieceWidth);
                 }
 
-                if (pieceRelations[y][x][2] === true) {
+                if (pieceRelations[y][x][2] && pieceRelations[y][x][2].type === true) {
+                    cutter = pieceRelations[y][x][2].jigsaw;
                     canvas.height += cutter.getSize(pieceHeight);
                     height += cutter.getSize(pieceHeight);
                 }
 
-                if (pieceRelations[y][x][3] === true) {
+                if (pieceRelations[y][x][3] && pieceRelations[y][x][3].type === true) {
+                    cutter = pieceRelations[y][x][3].jigsaw;
                     canvas.width += cutter.getSize(pieceWidth);
                     originalX -= cutter.getSize(pieceWidth);
                     width += cutter.getSize(pieceWidth);
@@ -126,7 +130,8 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                 },
                     relationSide;
 
-                if (pieceRelations[y][x][0] === false) {
+                if (pieceRelations[y][x][0] && pieceRelations[y][x][0].type === false) {
+                    cutter = pieceRelations[y][x][0].jigsaw;
                     relationSide = cutter.female_0(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'bottom';
@@ -137,7 +142,8 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
 //                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
-                } else if (pieceRelations[y][x][0] === true) {
+                } else if (pieceRelations[y][x][0] && pieceRelations[y][x][0].type === true) {
+                    cutter = pieceRelations[y][x][0].jigsaw;
                     relationSide = cutter.male_0(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'bottom';
@@ -149,7 +155,8 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 //                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
-                if (pieceRelations[y][x][1] === false) {
+                if (pieceRelations[y][x][1] && pieceRelations[y][x][1].type === false) {
+                    cutter = pieceRelations[y][x][1].jigsaw;
                     relationSide = cutter.female_1(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'left';
@@ -160,7 +167,8 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
 //                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
-                } else if (pieceRelations[y][x][1] === true) {
+                } else if (pieceRelations[y][x][1] && pieceRelations[y][x][1].type === true) {
+                    cutter = pieceRelations[y][x][1].jigsaw;
                     relationSide = cutter.male_1(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'left';
@@ -173,7 +181,8 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
                 }
 
-                if (pieceRelations[y][x][2] === false) {
+                if (pieceRelations[y][x][2] && pieceRelations[y][x][2].type === false) {
+                    cutter = pieceRelations[y][x][2].jigsaw;
                     relationSide = cutter.female_2(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'top';
@@ -184,7 +193,8 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
 //                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
-                } else if (pieceRelations[y][x][2] === true) {
+                } else if (pieceRelations[y][x][2] && pieceRelations[y][x][2].type === true) {
+                    cutter = pieceRelations[y][x][2].jigsaw;
                     relationSide = cutter.male_2(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'top';
@@ -196,7 +206,8 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 //                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
-                if (pieceRelations[y][x][3] === false) {
+                if (pieceRelations[y][x][3] && pieceRelations[y][x][3].type === false) {
+                    cutter = pieceRelations[y][x][3].jigsaw;
                     relationSide = cutter.female_3(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'right';
@@ -208,7 +219,8 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
 //                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
-                } else if (pieceRelations[y][x][3] === true) {
+                } else if (pieceRelations[y][x][3] && pieceRelations[y][x][3].type === true) {
+                    cutter = pieceRelations[y][x][3].jigsaw;
                     relationSide = cutter.male_3(canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'right';
@@ -255,7 +267,10 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
     image.src = imageSrc;
 
     function relation() {
-        return Math.round(Math.random()) === 1;
+        return {
+            type: Math.round(Math.random()) === 1,
+            jigsaw: self.getRandomJigsaw()
+        };
     }
 
     function makeNext(x, y, pos, myVal) {
@@ -268,7 +283,10 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                 pieceRelations[y][x] = [];
             }
 
-            pieceRelations[y][x][pos] = !myVal;
+            pieceRelations[y][x][pos] = {
+                type: !myVal.type,
+                jigsaw: myVal.jigsaw
+            };
         }
     }
 

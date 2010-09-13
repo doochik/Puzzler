@@ -115,6 +115,19 @@ function PuzzleGame(node, url, countX, countY) {
                             Puzz = null;
                             container.style.top = 0;
                             container.style.left = 0;
+
+                            var first = container.querySelector('#part0-0'),
+                                top = parseInt(first.style.top, 10),
+                                left = parseInt(first.style.left, 10),
+                                canvaces = container.getElementsByTagName('canvas');
+
+                            for (var i = 0, j = canvaces.length; i < j; i++) {
+                                var canvas = canvaces[i];
+                                canvas.style.top = (parseInt(canvas.style.top, 10) + top) + 'px';
+                                canvas.style.left = (parseInt(canvas.style.left, 10) + top) + 'px';
+                            }
+
+
                             var h1 = document.createElement('h1');
                             h1.innerHTML = 'Done!';
                             document.body.appendChild(h1);

@@ -1,8 +1,7 @@
-1) code optimization
-2) add check for canvas support
-3) add another types of jigsaws
-4) documentation
-5) clever z-index
-6) remove jQuery animate to minify dependencies
+0) !!!fix problem with security error on images from foreign hosts
 
-7) ??? maybe create separated classes for puzzle piece and canvas ??? "merge", and some getters can be methods of this class
+1) code optimization
+2) add another types of jigsaws
+3) documentation
+4) clever z-index
+5) ??? maybe create separated classes for puzzle piece and canvas ??? "merge", and some getters can be methods of this class

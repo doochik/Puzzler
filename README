@@ -8,5 +8,9 @@ new Puzzler('http://imagehost.com/path_to_image.jpg', 5, 5);
 
 
 === Chanelog ===
-0.1 (30.08.2010)
+0.02 (13.09.2010)
+Add another type of jigsaw
+Fix some bugs
+
+0.01 (30.08.2010)
 First version. It's just work. Code is not optimized.

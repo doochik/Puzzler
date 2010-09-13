@@ -1,12 +1,10 @@
 (function() {
 
-    function getIdxForCanvasData(canvas, x, y) {
-        return (x + y * canvas.width) * 4;
-    }
-
     var jigsaw =
     {
             name: 'rectangle',
+
+            _transparentData: document.createElement('canvas').getContext('2d').createImageData(1,1),
 
             /**
              * @param canvas
@@ -18,7 +16,6 @@
              */
             _makeTransparent: function(canvas, x1, y1, x2, y2, female) {
                 var context = canvas.getContext('2d'),
-                    canvasData = context.getImageData(0, 0, canvas.width, canvas.height),
                     i, j;
 
                 for (i = x1; i < x2; i++) {
@@ -27,17 +24,10 @@
                         // inPath ^ true === 0
                         // !inPath ^ false === 0
                         if ((context.isPointInPath(i, j) ^ female) === 0) {
-                            var coord = getIdxForCanvasData(canvas, i, j);
-                            canvasData.data[coord + 0] = 0;
-                            canvasData.data[coord + 1] = 0;
-                            canvasData.data[coord + 2] = 0;
-                            canvasData.data[coord + 3] = 0;
+                            context.putImageData(this._transparentData, i, j);
                         }
                     }
                 }
-
-
-                context.putImageData(canvasData, 0, 0);
             },
 
 

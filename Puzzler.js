@@ -8,11 +8,6 @@
  * http://www.opensource.org/licenses/gpl-3.0.html
  */
 
-
-//TODO: разрезать по парам
-//TODO: сделать вариант с круглыми уголками
-//TODO: сверху - ceil, снизу floor
-
 /**
  * 
  * @param imageSrc
@@ -140,7 +135,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceHeight);
                     neighbours['top'] = relationSide;
 
-//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
                 } else if (pieceRelations[y][x][0] && pieceRelations[y][x][0].type === true) {
                     cutter = pieceRelations[y][x][0].jigsaw;
@@ -152,7 +147,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceHeight);
                     neighbours['top'] = relationSide;
 
-//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
                 if (pieceRelations[y][x][1] && pieceRelations[y][x][1].type === false) {
@@ -165,7 +160,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceWidth);
                     neighbours['right'] = relationSide;
 
-//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
                 } else if (pieceRelations[y][x][1] && pieceRelations[y][x][1].type === true) {
                     cutter = pieceRelations[y][x][1].jigsaw;
@@ -177,7 +172,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceWidth);
                     neighbours['right'] = relationSide;
 
-//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
                 }
 
@@ -191,7 +186,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceHeight);
                     neighbours['bottom'] = relationSide;
 
-//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
                 } else if (pieceRelations[y][x][2] && pieceRelations[y][x][2].type === true) {
                     cutter = pieceRelations[y][x][2].jigsaw;
@@ -203,7 +198,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                     relationSide.attachSize = cutter.getSize(pieceHeight);
                     neighbours['bottom'] = relationSide;
 
-//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
                 if (pieceRelations[y][x][3] && pieceRelations[y][x][3].type === false) {
@@ -217,7 +212,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
                     neighbours['left'] = relationSide;
 
-//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
 
                 } else if (pieceRelations[y][x][3] && pieceRelations[y][x][3].type === true) {
                     cutter = pieceRelations[y][x][3].jigsaw;
@@ -230,7 +225,7 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
                     neighbours['left'] = relationSide;
 
-//                    cutter.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
                 }
 
                 var container = document.createElement('div');
@@ -297,6 +292,18 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
 Puzzler.prototype = {
 
+    //TODO: debug function
+    drawPoint: function(canvas, x, y) {
+        var canvasContext = canvas.getContext('2d');
+
+        canvasContext.beginPath();
+        canvasContext.strokeStyle = '#F00';
+        canvasContext.moveTo(x - 1, y - 1);
+        canvasContext.lineTo(x, y);
+        canvasContext.stroke();
+        canvasContext.closePath();
+    },
+    
     /**
      *
      * @param x

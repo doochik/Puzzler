@@ -95,18 +95,6 @@
              */
             _size: 0.2,
 
-            //TODO: debug function
-            drawPoint: function(canvas, x, y) {
-                var canvasContext = canvas.getContext('2d');
-
-                canvasContext.beginPath();
-                canvasContext.strokeStyle = '#F00';
-                canvasContext.moveTo(x - 1, y - 1);
-                canvasContext.lineTo(x, y);
-                canvasContext.stroke();
-                canvasContext.closePath();
-            },
-
             //TODO: не вырезать дату полного изображения
             //TODO: не бегать по всей длине/высоте
             //TODO: offsetX считается по-разному

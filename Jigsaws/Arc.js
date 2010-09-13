@@ -7,7 +7,7 @@
     var jigsaw = {
             name: 'arc',
 
-            _size: 0.2, 
+            _size: 0.1, 
 
             getSize: function(size) {
                 return Math.round(size*this._size);
@@ -86,7 +86,7 @@
 
             male_2: function(canvas, width, height, x, y) {
                 var x1 = Math.round(width/2 + x);
-                var y1 = height;
+                var y1 = height + y;
 
                 var size = this.getSize(height);
 

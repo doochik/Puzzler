@@ -14,7 +14,7 @@
  * @param xCount
  * @param yCount
  */
-var Puzzler = function(imageSrc, xCount, yCount, callback) {
+var Puzzler = function(imageSrc, xCount, yCount, onComplete, onProgress) {
     var image = new Image();
 
     var self = this;
@@ -25,178 +25,24 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
             pieceWidth = Math.round(image.width / xCount),
             pieceHeight = Math.round(image.height / yCount);
 
-        var pieces = new Array(yCount),
-            pieceRelations = new Array(yCount),
-            pieceRelation;
-
-        for (y = 0; y < yCount; y++) {
-            pieces[y] = [];
-            pieceRelations[y] = [];
-            for (x = 0; x < xCount; x++) {
-                pieces[y][x] = [];
-                pieceRelations[y][x] = [];
+        window.setTimeout(function() {
+            makePiece(x, y, pieceWidth, pieceHeight);
+            x++;
+            if (x >= xCount) {
+                x = 0;
+                y++;
             }
-        }
 
-        for (y = 0; y < yCount; y++) {
+            onProgress(x + (y*xCount), xCount * yCount);
 
-            for (x = 0; x < xCount; x++) {
-
-                pieceRelation = [
-                    !def(pieceRelations[y][x][0]) ? (pieceRelations[y][x][0] = y === 0 ? null : relation()) : pieceRelations[y][x][0], //top,
-                    !def(pieceRelations[y][x][1]) ? (pieceRelations[y][x][1] = x === xCount - 1 ? null : relation()) : pieceRelations[y][x][1], //left
-                    !def(pieceRelations[y][x][2]) ? (pieceRelations[y][x][2] = y === yCount - 1 ? null : relation()) : pieceRelations[y][x][2], //bottom
-                    !def(pieceRelations[y][x][3]) ? (pieceRelations[y][x][3] = x === 0 ? null : relation()) : pieceRelations[y][x][3] //right
-                ];
-                makeNext(pieceRelations, x + 1, y, 3, pieceRelation[1]);
-                makeNext(pieceRelations, x, y + 1, 0, pieceRelation[2]);
-
-                var cutter;
-                var originalX = pieceWidth * x;
-                var originalY = pieceHeight * y;
-                var width = pieceWidth;
-                var height = pieceHeight;
-
-                var pieceNullX = 0;
-                var pieceNullY = 0;
-
-                var canvas = document.createElement('canvas');
-                canvas.id = 'part' + y + '-' + x;
-                canvas.width = pieceWidth;
-                canvas.height = pieceHeight;
-
-                if (male(pieceRelation[0])) {
-                    cutter = pieceRelation[0].jigsaw;
-                    canvas.height += cutter.getSize(pieceHeight);
-                    originalY -= cutter.getSize(pieceHeight);
-                    height += cutter.getSize(pieceHeight);
-                    pieceNullY += cutter.getSize(pieceHeight);
-                }
-
-                if (male(pieceRelation[1])) {
-                    cutter = pieceRelation[1].jigsaw;
-                    canvas.width += cutter.getSize(pieceWidth);
-                    width += cutter.getSize(pieceWidth);
-                }
-
-                if (male(pieceRelation[2])) {
-                    cutter = pieceRelation[2].jigsaw;
-                    canvas.height += cutter.getSize(pieceHeight);
-                    height += cutter.getSize(pieceHeight);
-                }
-
-                if (male(pieceRelation[3])) {
-                    cutter = pieceRelation[3].jigsaw;
-                    canvas.width += cutter.getSize(pieceWidth);
-                    originalX -= cutter.getSize(pieceWidth);
-                    width += cutter.getSize(pieceWidth);
-
-                    pieceNullX += cutter.getSize(pieceWidth);
-                }
-                
-                var canvasContext = canvas.getContext('2d');
-
-                canvasContext.drawImage(
-                    image,
-                    originalX, // original x
-                    originalY, // original y
-                    width, // original width
-                    height, // original height
-                    0, // destination x
-                    0, // destination y
-                    width, // destination width
-                    height // destination height
-                    );
-
-                var neighbours = {
-                    /*left: [],
-                    right: [],
-                    top: [],
-                    bottom: []*/
-                },
-                    relationSide;
-
-                if (hasJigsaw(pieceRelation[0])) {
-                    cutter = pieceRelation[0].jigsaw;
-                    relationSide = cutter[pieceRelation[0].type + '_0'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-
-                    relationSide.attachToSide = 'bottom';
-                    relationSide.attachToX = x;
-                    relationSide.attachToY = y - 1;
-                    relationSide.attachSize = cutter.getSize(pieceHeight);
-                    neighbours['top'] = relationSide;
-
-//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
-
-                }
-
-                if (hasJigsaw(pieceRelation[1])) {
-                    cutter = pieceRelation[1].jigsaw;
-                    relationSide = cutter[pieceRelation[1].type + '_1'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-
-                    relationSide.attachToSide = 'left';
-                    relationSide.attachToX = x + 1;
-                    relationSide.attachToY = y;
-                    relationSide.attachSize = cutter.getSize(pieceWidth);
-                    neighbours['right'] = relationSide;
-
-//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
-
-                }
-
-                if (hasJigsaw(pieceRelation[2])) {
-                    cutter = pieceRelation[2].jigsaw;
-                    relationSide = cutter[pieceRelation[2].type + '_2'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-
-                    relationSide.attachToSide = 'top';
-                    relationSide.attachToX = x;
-                    relationSide.attachToY = y + 1;
-                    relationSide.attachSize = cutter.getSize(pieceHeight);
-                    neighbours['bottom'] = relationSide;
-
-//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
-
-                }
-
-                if (hasJigsaw(pieceRelation[3])) {
-                    cutter = pieceRelation[3].jigsaw;
-                    relationSide = cutter[pieceRelation[3].type + '_3'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
-
-                    relationSide.attachToSide = 'right';
-                    relationSide.attachToX = x - 1;
-                    relationSide.attachToY = y;
-                    relationSide.attachSize = cutter.getSize(pieceWidth);
-
-                    neighbours['left'] = relationSide;
-
-//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
-
-                }
-
-                var container = document.createElement('div');
-                container.style.cssText = 'position:absolute;height:' + canvas.height + 'px;width:' + canvas.width + 'px';
-                container.appendChild(canvas);
-
-                canvas.style.cssText = 'position:absolute;top:0;left:0';
-
-                var piece = {};
-                piece[self.pieceKey(x, y)] = {
-                    canvas: canvas,
-                    width: pieceWidth,
-                    height: pieceHeight,
-                    offsetX: pieceNullX,
-                    offsetY: pieceNullY,
-                    neighbours: neighbours
-                };
-
-                pieces[y][x] = {
-                    pieces: piece,
-                    container: container
-                }
+            if (y < yCount) {
+                setTimeout(arguments.callee, 10);
+            } else {
+                onComplete(pieces);
             }
-        }
+        }, 10);
+        
 
-        callback(pieces);
     };
 
     image.onerror = function() {
@@ -204,6 +50,173 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
     };
 
     image.src = imageSrc;
+
+    // here we're waiting for image load, so prepare array for pieces
+    var pieces = new Array(yCount),
+        pieceRelations = new Array(yCount);
+
+    for (var y = 0; y < yCount; y++) {
+        pieces[y] = [];
+        pieceRelations[y] = [];
+        for (var x = 0; x < xCount; x++) {
+            pieces[y][x] = [];
+            pieceRelations[y][x] = [];
+        }
+    }
+
+    function makePiece(x, y, pieceWidth, pieceHeight) {
+        var pieceRelation = [
+            !def(pieceRelations[y][x][0]) ? (pieceRelations[y][x][0] = y === 0 ? null : relation()) : pieceRelations[y][x][0], //top,
+            !def(pieceRelations[y][x][1]) ? (pieceRelations[y][x][1] = x === xCount - 1 ? null : relation()) : pieceRelations[y][x][1], //left
+            !def(pieceRelations[y][x][2]) ? (pieceRelations[y][x][2] = y === yCount - 1 ? null : relation()) : pieceRelations[y][x][2], //bottom
+            !def(pieceRelations[y][x][3]) ? (pieceRelations[y][x][3] = x === 0 ? null : relation()) : pieceRelations[y][x][3] //right
+        ];
+        makeNext(pieceRelations, x + 1, y, 3, pieceRelation[1]);
+        makeNext(pieceRelations, x, y + 1, 0, pieceRelation[2]);
+
+        var cutter;
+        var originalX = pieceWidth * x;
+        var originalY = pieceHeight * y;
+        var width = pieceWidth;
+        var height = pieceHeight;
+
+        var pieceNullX = 0;
+        var pieceNullY = 0;
+
+        var canvas = document.createElement('canvas');
+        canvas.id = 'part' + y + '-' + x;
+        canvas.width = pieceWidth;
+        canvas.height = pieceHeight;
+
+        if (male(pieceRelation[0])) {
+            cutter = pieceRelation[0].jigsaw;
+            canvas.height += cutter.getSize(pieceHeight);
+            originalY -= cutter.getSize(pieceHeight);
+            height += cutter.getSize(pieceHeight);
+            pieceNullY += cutter.getSize(pieceHeight);
+        }
+
+        if (male(pieceRelation[1])) {
+            cutter = pieceRelation[1].jigsaw;
+            canvas.width += cutter.getSize(pieceWidth);
+            width += cutter.getSize(pieceWidth);
+        }
+
+        if (male(pieceRelation[2])) {
+            cutter = pieceRelation[2].jigsaw;
+            canvas.height += cutter.getSize(pieceHeight);
+            height += cutter.getSize(pieceHeight);
+        }
+
+        if (male(pieceRelation[3])) {
+            cutter = pieceRelation[3].jigsaw;
+            canvas.width += cutter.getSize(pieceWidth);
+            originalX -= cutter.getSize(pieceWidth);
+            width += cutter.getSize(pieceWidth);
+
+            pieceNullX += cutter.getSize(pieceWidth);
+        }
+
+        var canvasContext = canvas.getContext('2d');
+
+        canvasContext.drawImage(
+            image,
+            originalX, // original x
+            originalY, // original y
+            width, // original width
+            height, // original height
+            0, // destination x
+            0, // destination y
+            width, // destination width
+            height // destination height
+            );
+
+        var neighbours = {
+            /*left: [],
+            right: [],
+            top: [],
+            bottom: []*/
+        },
+            relationSide;
+
+        if (hasJigsaw(pieceRelation[0])) {
+            cutter = pieceRelation[0].jigsaw;
+            relationSide = cutter[pieceRelation[0].type + '_0'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
+
+            relationSide.attachToSide = 'bottom';
+            relationSide.attachToX = x;
+            relationSide.attachToY = y - 1;
+            relationSide.attachSize = cutter.getSize(pieceHeight);
+            neighbours['top'] = relationSide;
+
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+
+        }
+
+        if (hasJigsaw(pieceRelation[1])) {
+            cutter = pieceRelation[1].jigsaw;
+            relationSide = cutter[pieceRelation[1].type + '_1'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
+
+            relationSide.attachToSide = 'left';
+            relationSide.attachToX = x + 1;
+            relationSide.attachToY = y;
+            relationSide.attachSize = cutter.getSize(pieceWidth);
+            neighbours['right'] = relationSide;
+
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+
+        }
+
+        if (hasJigsaw(pieceRelation[2])) {
+            cutter = pieceRelation[2].jigsaw;
+            relationSide = cutter[pieceRelation[2].type + '_2'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
+
+            relationSide.attachToSide = 'top';
+            relationSide.attachToX = x;
+            relationSide.attachToY = y + 1;
+            relationSide.attachSize = cutter.getSize(pieceHeight);
+            neighbours['bottom'] = relationSide;
+
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+
+        }
+
+        if (hasJigsaw(pieceRelation[3])) {
+            cutter = pieceRelation[3].jigsaw;
+            relationSide = cutter[pieceRelation[3].type + '_3'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
+
+            relationSide.attachToSide = 'right';
+            relationSide.attachToX = x - 1;
+            relationSide.attachToY = y;
+            relationSide.attachSize = cutter.getSize(pieceWidth);
+
+            neighbours['left'] = relationSide;
+
+//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+
+        }
+
+        var container = document.createElement('div');
+        container.style.cssText = 'position:absolute;height:' + canvas.height + 'px;width:' + canvas.width + 'px';
+        container.appendChild(canvas);
+
+        canvas.style.cssText = 'position:absolute;top:0;left:0';
+
+        var piece = {};
+        piece[self.pieceKey(x, y)] = {
+            canvas: canvas,
+            width: pieceWidth,
+            height: pieceHeight,
+            offsetX: pieceNullX,
+            offsetY: pieceNullY,
+            neighbours: neighbours
+        };
+
+        pieces[y][x] = {
+            pieces: piece,
+            container: container
+        }
+    }
 
     function relation() {
         return {
@@ -271,7 +284,7 @@ Puzzler.prototype = {
      * @param container1
      * @param container2
      * @param {String} piece1ConnectingSide
-     * @return {Canvas}
+     * @return {Node}
      */
     mergePieces: function(container1, piece1Index, piece1ConnectingSide, container2) {
         var side1,

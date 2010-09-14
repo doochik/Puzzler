@@ -4,7 +4,6 @@ function PuzzleGame(node, url, countX, countY) {
         piecesCount = countX*countY;
 
     var Puzz = new Puzzler(url, countX, countY, function(pieces) {
-        node.innerHTML = 'Ready!';
         puzzles = pieces;
 
         var x = 0, y = 0;
@@ -31,6 +30,8 @@ function PuzzleGame(node, url, countX, countY) {
         }
 
         init();
+    }, function(complete, all) {
+        node.innerHTML = 'Prepare pieces: ' + complete + '/' + all;    
     });
 
     var blockStart = false;

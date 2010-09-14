@@ -29,7 +29,7 @@
                         // inPath ^ true === 0
                         // !inPath ^ false === 0
                         if ((context.isPointInPath(i, j) ^ female) === 0) {
-                            context.putImageData(this._transparentData, i, j);
+                            context.clearRect(i, j, 1, 1);
                         }
                     }
                 }

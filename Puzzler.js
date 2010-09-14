@@ -1,7 +1,7 @@
 /**
  * JS object to cut any image for puzzle.
  *
- * v 0.01
+ * v 0.03
  *
  * Copyright (c) 2010 Alexey Androsov <doochik@ya.ru>
  * Licensed under GPLv3

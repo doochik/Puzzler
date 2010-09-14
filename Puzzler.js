@@ -26,7 +26,8 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
             pieceHeight = Math.round(image.height / yCount);
 
         var pieces = new Array(yCount),
-            pieceRelations = new Array(yCount);
+            pieceRelations = new Array(yCount),
+            pieceRelation;
 
         for (y = 0; y < yCount; y++) {
             pieces[y] = [];
@@ -41,23 +42,14 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
             for (x = 0; x < xCount; x++) {
 
-                if (!def(pieceRelations[y][x][0])) {
-                    pieceRelations[y][x][0] = y === 0 ? null : relation(); //top
-                }
-
-                if (!def(pieceRelations[y][x][1])) {
-                    pieceRelations[y][x][1] = x === xCount - 1 ? null : relation(); //left
-                }
-                makeNext(pieceRelations, x + 1, y, 3, pieceRelations[y][x][1]);
-
-                if (!def(pieceRelations[y][x][2])) {
-                    pieceRelations[y][x][2] = y === yCount - 1 ? null : relation(); //bottom
-                }
-                makeNext(pieceRelations, x, y + 1, 0, pieceRelations[y][x][2]);
-
-                if (!def(pieceRelations[y][x][3])) {
-                    pieceRelations[y][x][3] = x === 0 ? null : relation(); //right
-                }
+                pieceRelation = [
+                    !def(pieceRelations[y][x][0]) ? (pieceRelations[y][x][0] = y === 0 ? null : relation()) : pieceRelations[y][x][0], //top,
+                    !def(pieceRelations[y][x][1]) ? (pieceRelations[y][x][1] = x === xCount - 1 ? null : relation()) : pieceRelations[y][x][1], //left
+                    !def(pieceRelations[y][x][2]) ? (pieceRelations[y][x][2] = y === yCount - 1 ? null : relation()) : pieceRelations[y][x][2], //bottom
+                    !def(pieceRelations[y][x][3]) ? (pieceRelations[y][x][3] = x === 0 ? null : relation()) : pieceRelations[y][x][3] //right
+                ];
+                makeNext(pieceRelations, x + 1, y, 3, pieceRelation[1]);
+                makeNext(pieceRelations, x, y + 1, 0, pieceRelation[2]);
 
                 var cutter;
                 var originalX = pieceWidth * x;
@@ -73,28 +65,28 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                 canvas.width = pieceWidth;
                 canvas.height = pieceHeight;
 
-                if (male(pieceRelations[y][x][0])) {
-                    cutter = pieceRelations[y][x][0].jigsaw;
+                if (male(pieceRelation[0])) {
+                    cutter = pieceRelation[0].jigsaw;
                     canvas.height += cutter.getSize(pieceHeight);
                     originalY -= cutter.getSize(pieceHeight);
                     height += cutter.getSize(pieceHeight);
                     pieceNullY += cutter.getSize(pieceHeight);
                 }
 
-                if (male(pieceRelations[y][x][1])) {
-                    cutter = pieceRelations[y][x][1].jigsaw;
+                if (male(pieceRelation[1])) {
+                    cutter = pieceRelation[1].jigsaw;
                     canvas.width += cutter.getSize(pieceWidth);
                     width += cutter.getSize(pieceWidth);
                 }
 
-                if (male(pieceRelations[y][x][2])) {
-                    cutter = pieceRelations[y][x][2].jigsaw;
+                if (male(pieceRelation[2])) {
+                    cutter = pieceRelation[2].jigsaw;
                     canvas.height += cutter.getSize(pieceHeight);
                     height += cutter.getSize(pieceHeight);
                 }
 
-                if (male(pieceRelations[y][x][3])) {
-                    cutter = pieceRelations[y][x][3].jigsaw;
+                if (male(pieceRelation[3])) {
+                    cutter = pieceRelation[3].jigsaw;
                     canvas.width += cutter.getSize(pieceWidth);
                     originalX -= cutter.getSize(pieceWidth);
                     width += cutter.getSize(pieceWidth);
@@ -124,9 +116,9 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
                 },
                     relationSide;
 
-                if (hasJigsaw(pieceRelations[y][x][0])) {
-                    cutter = pieceRelations[y][x][0].jigsaw;
-                    relationSide = cutter[pieceRelations[y][x][0].type + '_0'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
+                if (hasJigsaw(pieceRelation[0])) {
+                    cutter = pieceRelation[0].jigsaw;
+                    relationSide = cutter[pieceRelation[0].type + '_0'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'bottom';
                     relationSide.attachToX = x;
@@ -138,9 +130,9 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
                 }
 
-                if (hasJigsaw(pieceRelations[y][x][1])) {
-                    cutter = pieceRelations[y][x][1].jigsaw;
-                    relationSide = cutter[pieceRelations[y][x][1].type + '_1'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
+                if (hasJigsaw(pieceRelation[1])) {
+                    cutter = pieceRelation[1].jigsaw;
+                    relationSide = cutter[pieceRelation[1].type + '_1'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'left';
                     relationSide.attachToX = x + 1;
@@ -152,9 +144,9 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
                 }
 
-                if (hasJigsaw(pieceRelations[y][x][2])) {
-                    cutter = pieceRelations[y][x][2].jigsaw;
-                    relationSide = cutter[pieceRelations[y][x][2].type + '_2'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
+                if (hasJigsaw(pieceRelation[2])) {
+                    cutter = pieceRelation[2].jigsaw;
+                    relationSide = cutter[pieceRelation[2].type + '_2'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'top';
                     relationSide.attachToX = x;
@@ -166,9 +158,9 @@ var Puzzler = function(imageSrc, xCount, yCount, callback) {
 
                 }
 
-                if (hasJigsaw(pieceRelations[y][x][3])) {
-                    cutter = pieceRelations[y][x][3].jigsaw;
-                    relationSide = cutter[pieceRelations[y][x][3].type + '_3'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
+                if (hasJigsaw(pieceRelation[3])) {
+                    cutter = pieceRelation[3].jigsaw;
+                    relationSide = cutter[pieceRelation[3].type + '_3'](canvas, pieceWidth, pieceHeight, pieceNullX, pieceNullY);
 
                     relationSide.attachToSide = 'right';
                     relationSide.attachToX = x - 1;

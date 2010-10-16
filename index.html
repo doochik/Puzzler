@@ -6,6 +6,8 @@
     <script type="text/javascript" src="Puzzler.js"></script>
     <script type="text/javascript" src="Jigsaws/Rectangle.js"></script>
     <script type="text/javascript" src="Jigsaws/Arc.js"></script>
+    <script type="text/javascript" src="Jigsaws/Classic.js"></script>
+    <!--<script type="text/javascript" src="Jigsaws/Sin.js"></script>-->
     <script type="text/javascript" src="PuzzleGame.js"></script>
     <style type="text/css">
         /** block select on Mobile Safari **/
@@ -55,7 +57,7 @@
             dest.innerHTML = 'Loading image...';
             document.body.appendChild(dest);
 
-            new PuzzleGame(dest, url, countY, countX);
+            new PuzzleGame(dest, url, countX, countY);
         }, false);
     } else {
         document.body.innerHTML = '<h1>Sorry, but you browser doesn\'t support "Canvas". Please, use modern browser such as Firefox, Opera, Safari or Chrome</h1>';

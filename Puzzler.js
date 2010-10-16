@@ -1,7 +1,7 @@
 /**
  * JS object to cut any image for puzzle.
  *
- * v 0.03
+ * v 0.034
  *
  * Copyright (c) 2010 Alexey Androsov <doochik@ya.ru>
  * Licensed under GPLv3
@@ -88,33 +88,36 @@ var Puzzler = function(imageSrc, xCount, yCount, onComplete, onProgress) {
         canvas.width = pieceWidth;
         canvas.height = pieceHeight;
 
-        if (male(pieceRelation[0])) {
+        if (pieceRelation[0] !== null) {
             cutter = pieceRelation[0].jigsaw;
-            canvas.height += cutter.getSize(pieceHeight);
-            originalY -= cutter.getSize(pieceHeight);
-            height += cutter.getSize(pieceHeight);
-            pieceNullY += cutter.getSize(pieceHeight);
+            var size = cutter.getSize(pieceHeight, male(pieceRelation[0]));
+            canvas.height += size;
+            originalY -= size;
+            height += size;
+            pieceNullY += size;
         }
 
-        if (male(pieceRelation[1])) {
+        if (pieceRelation[1] !== null) {
             cutter = pieceRelation[1].jigsaw;
-            canvas.width += cutter.getSize(pieceWidth);
-            width += cutter.getSize(pieceWidth);
+            size = cutter.getSize(pieceWidth, male(pieceRelation[1]));
+            canvas.width += size;
+            width += size;
         }
 
-        if (male(pieceRelation[2])) {
+        if (pieceRelation[2] !== null) {
             cutter = pieceRelation[2].jigsaw;
-            canvas.height += cutter.getSize(pieceHeight);
-            height += cutter.getSize(pieceHeight);
+            size = cutter.getSize(pieceHeight, male(pieceRelation[2]));
+            canvas.height += size;
+            height += size;
         }
 
-        if (male(pieceRelation[3])) {
+        if (pieceRelation[3] !== null) {
             cutter = pieceRelation[3].jigsaw;
-            canvas.width += cutter.getSize(pieceWidth);
-            originalX -= cutter.getSize(pieceWidth);
-            width += cutter.getSize(pieceWidth);
-
-            pieceNullX += cutter.getSize(pieceWidth);
+            size = cutter.getSize(pieceWidth, male(pieceRelation[3]));
+            canvas.width += size;
+            originalX -= size;
+            width += size;
+            pieceNullX += size;
         }
 
         var canvasContext = canvas.getContext('2d');

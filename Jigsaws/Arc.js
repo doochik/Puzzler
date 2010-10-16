@@ -5,10 +5,11 @@
 
             _size: 0.1, 
 
-            getSize: function(size) {
-                return Math.round(size*this._size);
+            getSize: function(size, male) {
+                return male ? Math.round(size*this._size) : 0;
             },
 
+            //TODO: remove this
             _transparentData: document.createElement('canvas').getContext('2d').createImageData(1,1),
 
             /**
@@ -38,7 +39,7 @@
             male_0: function(canvas, width, height, x, y) {
                 var x1 = Math.round(width/2 + x);
 
-                var size = this.getSize(height);
+                var size = this.getSize(height, true);
 
                 var context = canvas.getContext('2d');
                 context.strokeStyle = 'transparent';
@@ -58,7 +59,7 @@
                 var x1 = width + x;
                 var y1 = Math.round(height/2 + y);
 
-                var size = this.getSize(width);
+                var size = this.getSize(width, true);
 
                 var context = canvas.getContext('2d');
                 context.strokeStyle = 'transparent';
@@ -78,7 +79,7 @@
                 var x1 = Math.round(width/2 + x);
                 var y1 = height + y;
 
-                var size = this.getSize(height);
+                var size = this.getSize(height, true);
 
                 var context = canvas.getContext('2d');
                 context.strokeStyle = 'transparent';
@@ -98,7 +99,7 @@
                 var x1 = x;
                 var y1 = Math.round(height/2 + y);
 
-                var size = this.getSize(width);
+                var size = this.getSize(width, true);
 
                 var context = canvas.getContext('2d');
                 context.strokeStyle = 'transparent';
@@ -118,7 +119,7 @@
                 var x1 = Math.round(width/2 + x);
                 var y1 = 0;
 
-                var size = this.getSize(height);
+                var size = this.getSize(height, true);
 
                 var context = canvas.getContext('2d');
                 context.beginPath();
@@ -140,7 +141,7 @@
                 var x1 = canvas.width;
                 var y1 = Math.round(height/2 + y);
 
-                var size = this.getSize(width);
+                var size = this.getSize(width, true);
 
                 var context = canvas.getContext('2d');
                 context.beginPath();
@@ -162,7 +163,7 @@
                 var x1 = Math.round(width/2 + x);
                 var y1 = canvas.height;
 
-                var size = this.getSize(height);
+                var size = this.getSize(height, true);
 
                 var context = canvas.getContext('2d');
                 context.beginPath();
@@ -184,7 +185,7 @@
                 var x1 = 0;
                 var y1 = Math.round(height/2 + y);
 
-                var size = this.getSize(width);
+                var size = this.getSize(width, true);
 
                 var context = canvas.getContext('2d');
                 context.beginPath();

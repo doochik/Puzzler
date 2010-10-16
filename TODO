@@ -3,4 +3,6 @@
 3) documentation
 4) clever z-index
 5) ??? maybe create separated classes for puzzle piece and canvas ??? "merge", and some getters can be methods of this class
-6) make prototype for jigsaws, implement common functions (makeTransparent, getSize)
+6) make prototype for jigsaws, implement common functions (makeTransparent, getSize, getFemaleSize)
+7) debug mode: точки соприкосновения, вспомогательные линии, реальные размеры пазла
+8) shuffle puzzles

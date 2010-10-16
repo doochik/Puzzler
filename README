@@ -8,6 +8,9 @@ new Puzzler('http://imagehost.com/path_to_image.jpg', 5, 5);
 
 
 === Chanelog ===
+0.04 (14.09.2010)
+Add Classic jigsaw
+
 0.03 (14.09.2010)
 Jigsaw optimization (10x boost)
 onProgressCallback

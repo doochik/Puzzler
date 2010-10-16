@@ -126,8 +126,8 @@
             return this._relationSide('female', x1, y1, x2, y2);
         },
 
-        getSize: function(size) {
-            return Math.round(size * this._size);
+        getSize: function(size, male) {
+            return male ? Math.round(size * this._size) : 0;
         }
     };
 

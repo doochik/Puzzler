@@ -297,7 +297,7 @@
             context.clearRect(x1, 0, x2, y);
             context.clearRect(x1, y + height, x2, canvas.height);
 
-            this._makeTransparent(canvas, x1 - this.getMaleSize(width), y1, x2, y2);
+            this._makeTransparent(canvas, x1 - this.getMaleSize(width) + 1 /*strange blank line*/, y1, x2, y2);
 
             return this._relationSide('female', x1 - this.getMaleSize(width), y1, x2, y2);
         },
@@ -366,12 +366,12 @@
         },
 
         getMaleSize: function(size) {
-            return Math.round(size * this._size);
+            return Math.floor(size * this._size);
         },
 
         getFemaleSize: function(size) {
             // get proportion and calc size for wave
-            return Math.round(this.getMaleSize(size)/this.tabSize * this.waveSize);
+            return Math.floor(this.getMaleSize(size)/this.tabSize * this.waveSize);
         }
     };
 

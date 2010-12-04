@@ -1,16 +1,23 @@
-function PuzzleGame(node, url, countX, countY) {
+function PuzzleGame(node, url, size) {
     var puzzles,
+
+        piecesCount;
+
+    var Puzz = new Puzzler(url, size, function(pieces, countX, countY) {
+        puzzles = pieces;
 
         piecesCount = countX*countY;
 
-    var Puzz = new Puzzler(url, countX, countY, function(pieces) {
-        puzzles = pieces;
-
         var x = 0, y = 0;
+
+        /*var shuffle = function(o){ //v1.0
+            for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+            return o;
+        };*/
 
         for (var j = 0; j < countY; j++) {
             for (var i = 0; i < countX; i++) {
-            
+
                 var container = pieces[j][i].container;
 
                 container.setAttribute('data-puzzle-x', i);

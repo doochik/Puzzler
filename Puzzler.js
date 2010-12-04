@@ -14,21 +14,29 @@
  * @param xCount
  * @param yCount
  */
-var Puzzler = function(imageSrc, xCount, yCount, onComplete, onProgress) {
+var Puzzler = function(imageSrc, type, onComplete, onProgress) {
     var image = new Image();
 
     var self = this;
 
     var sizes = {
-        'normal': 60
+        'small': 40,
+        'normal': 60,
+        'big': 80
     };
 
-    var pieceWidth = sizes['normal'];
-    var pieceHeight = sizes['normal'];
+    if (!(type in sizes)) {
+        type = 'normal'
+    }
+
+    var pieceWidth = sizes[type];
+    var pieceHeight = sizes[type];
 
     // here we're waiting for image load, so prepare array for pieces
     var pieces = [],
         pieceRelations = [];
+
+    var xCount, yCount;
 
     image.onload = function() {
 
@@ -60,7 +68,7 @@ var Puzzler = function(imageSrc, xCount, yCount, onComplete, onProgress) {
             if (y < yCount) {
                 setTimeout(arguments.callee, 10);
             } else {
-                onComplete(pieces);
+                onComplete(pieces, xCount, yCount);
             }
         }, 10);
         

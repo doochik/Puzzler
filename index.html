@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>Puzzle game example</title>
@@ -31,8 +30,11 @@
 <form action="" id="form" style="display:none">
     <fieldset>
         URL: <input type="text" name="url" value="img.jpg"/>
-        xCount: <input type="text" name="count-x" value="5"/>
-        YCount: <input type="text" name="count-y" value="5"/>
+        Size: <select name="size">
+        <option value="small">small</option>
+        <option value="normal" selected="selected">normal</option>
+        <option value="big">big</option>
+        </select>
 
         <input type="submit" value="Start" id="startGame"/>
     </fieldset>
@@ -47,9 +49,6 @@
             this.style.display = 'none';
 
             var url = this.url.value;
-            var countX = this['count-x'].value;
-            var countY = this['count-y'].value;
-
 
             var dest = document.createElement('div');
             dest.id = 'dest';
@@ -57,7 +56,7 @@
             dest.innerHTML = 'Loading image...';
             document.body.appendChild(dest);
 
-            new PuzzleGame(dest, url, countX, countY);
+            new PuzzleGame(dest, url, this['size'].value);
         }, false);
     } else {
         document.body.innerHTML = '<h1>Sorry, but you browser doesn\'t support "Canvas". Please, use modern browser such as Firefox, Opera, Safari or Chrome</h1>';

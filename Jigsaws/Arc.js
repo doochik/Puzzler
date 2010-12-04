@@ -3,14 +3,11 @@
     var jigsaw = {
             name: 'arc',
 
-            _size: 0.1, 
+            _size: 0.15,
 
             getSize: function(size, male) {
                 return male ? Math.round(size*this._size) : 0;
             },
-
-            //TODO: remove this
-            _transparentData: document.createElement('canvas').getContext('2d').createImageData(1,1),
 
             /**
              * @param canvas
@@ -42,9 +39,11 @@
                 var size = this.getSize(height, true);
 
                 var context = canvas.getContext('2d');
+                context.beginPath();
                 context.strokeStyle = 'transparent';
                 context.arc(x1, y, size, 0, Math.PI/180*180, true);
                 context.stroke();
+                context.closePath();
 
                 this._makeTransparent(canvas, 0, 0, canvas.width, y, false);
 
@@ -62,9 +61,11 @@
                 var size = this.getSize(width, true);
 
                 var context = canvas.getContext('2d');
+                context.beginPath();
                 context.strokeStyle = 'transparent';
                 context.arc(x1, y1, size, Math.PI/180*90, Math.PI/180*270, true);
                 context.stroke();
+                context.closePath();
 
                 this._makeTransparent(canvas, x1, 0, canvas.width, canvas.height, false);
 
@@ -82,9 +83,11 @@
                 var size = this.getSize(height, true);
 
                 var context = canvas.getContext('2d');
+                context.beginPath();
                 context.strokeStyle = 'transparent';
                 context.arc(x1, y1, size, Math.PI/180*180, Math.PI/180*360, true);
                 context.stroke();
+                context.closePath();
 
                 this._makeTransparent(canvas, 0, y1, canvas.width, canvas.height, false);
 
@@ -102,9 +105,11 @@
                 var size = this.getSize(width, true);
 
                 var context = canvas.getContext('2d');
+                context.beginPath();
                 context.strokeStyle = 'transparent';
                 context.arc(x1, y1, size, -Math.PI/180*90, Math.PI/180*90, true);
                 context.stroke();
+                context.closePath();
 
                 this._makeTransparent(canvas, 0, 0, x1, canvas.height, false);
 

@@ -19,11 +19,33 @@ var Puzzler = function(imageSrc, xCount, yCount, onComplete, onProgress) {
 
     var self = this;
 
+    var sizes = {
+        'normal': 60
+    };
+
+    var pieceWidth = sizes['normal'];
+    var pieceHeight = sizes['normal'];
+
+    // here we're waiting for image load, so prepare array for pieces
+    var pieces = [],
+        pieceRelations = [];
+
     image.onload = function() {
-        var x = 0,
-            y = 0,
-            pieceWidth = Math.round(image.width / xCount),
-            pieceHeight = Math.round(image.height / yCount);
+
+        xCount = Math.floor(image.width / pieceWidth);
+        yCount = Math.floor(image.height / pieceHeight);
+
+        for (var y = 0; y < yCount; y++) {
+            pieces[y] = [];
+            pieceRelations[y] = [];
+            for (var x = 0; x < xCount; x++) {
+                pieces[y][x] = [];
+                pieceRelations[y][x] = [];
+            }
+        }
+
+        x = 0;
+        y = 0;
 
         window.setTimeout(function() {
             makePiece(x, y, pieceWidth, pieceHeight);
@@ -50,19 +72,6 @@ var Puzzler = function(imageSrc, xCount, yCount, onComplete, onProgress) {
     };
 
     image.src = imageSrc;
-
-    // here we're waiting for image load, so prepare array for pieces
-    var pieces = new Array(yCount),
-        pieceRelations = new Array(yCount);
-
-    for (var y = 0; y < yCount; y++) {
-        pieces[y] = [];
-        pieceRelations[y] = [];
-        for (var x = 0; x < xCount; x++) {
-            pieces[y][x] = [];
-            pieceRelations[y][x] = [];
-        }
-    }
 
     function makePiece(x, y, pieceWidth, pieceHeight) {
         var pieceRelation = [

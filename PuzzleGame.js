@@ -4,6 +4,11 @@ function PuzzleGame(node, url, size, jigsaws, debugMode) {
         piecesCount;
 
     var Puzz = new Puzzler(url, size, jigsaws, function(pieces, countX, countY, size) {
+
+        size *= 1.4;
+
+        node.innerHTML = '';
+
         puzzles = pieces;
 
         for (y = 0; y < countY; y++) {
@@ -42,12 +47,12 @@ function PuzzleGame(node, url, size, jigsaws, debugMode) {
                 container.style.top = y + 'px';
                 container.style.left = x + 'px';
 
-                x += parseInt(container.childNodes[0].width, 10) + 20;
+                x += size;
                 container.addEventListener('mousedown', startDrag, false);
             }
 
             x = 0;
-            y += 100;
+            y += size;
         }
 
         init();

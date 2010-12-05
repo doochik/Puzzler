@@ -38,35 +38,6 @@
             }, this);
         },
 
-        /**
-         * @param {CanvasContext} context
-         * @param x1
-         * @param y1
-         * @param x2
-         * @param y2
-         * @param female
-         */
-        _makeTransparent: function(context, x1, y1, x2, y2, female) {
-            var i, j;
-
-            for (i = x1; i < x2; i++) {
-                for (j = y1; j < y2; j++) {
-                    // bitwise XOR
-                    // inPath ^ true === 0
-                    // !inPath ^ false === 0
-                    if ((context.isPointInPath(i, j) ^ female) === 0) {
-                        context.clearRect(i, j, 1, 1);
-                    }
-                }
-            }
-        },
-
-        /**
-         * Размер.
-         * @type Number
-         */
-        _size: 0.2,
-
         _relationSide: function(type, x1, y1, x2, y2) {
             return {
                 type: type,
@@ -312,14 +283,14 @@
         },
 
         getMaleSize: function(size) {
-            return Math.floor(size * this._size);
+            return Math.round(size * this._size);
         },
 
         getFemaleSize: function(size) {
             // get proportion and calc size for wave
-            return Math.floor(this.getMaleSize(size)/this.tabSize * this.waveSize);
+            return Math.round(this.getMaleSize(size)/this.tabSize * this.waveSize);
         }
     };
 
-    Puzzler.registerJigsaw(jigsaw);
+    Puzzler.registerJigsaw(Puzzler.makeJigsaw(jigsaw));
 })();

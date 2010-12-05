@@ -469,12 +469,35 @@ Puzzler.prototype = {
     knownJigsaws: {}
 };
 
+/**
+ * Register jigsaw in Puzzler
+ * @param {Object} jigsaw
+ * @static
+ */
 Puzzler.registerJigsaw = function(jigsaw) {
     if (jigsaw.name in Puzzler.prototype.knownJigsaws) {
         throw new Error('Jigsaw with such name is already exists.')
     }
 
     Puzzler.prototype.knownJigsaws[jigsaw.name] = jigsaw;
+};
+
+/**
+ * Extends target jigsaw with abstract Puzzler.aJigsaw;
+ * @static
+ * @param {Object} jigsaw
+ * @return {Object}
+ */
+Puzzler.makeJigsaw = function(jigsaw) {
+    var aJigsaw = Puzzler.aJigsaw;
+    for (var prop in aJigsaw) {
+        // extend properties that doesn't exist in target jigsaw
+        if (aJigsaw.hasOwnProperty(prop) && !jigsaw.hasOwnProperty(prop)) {
+            jigsaw[prop] = aJigsaw[prop];
+        }
+    }
+
+    return jigsaw;
 };
 
 /**

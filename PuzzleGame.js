@@ -1,4 +1,4 @@
-function PuzzleGame(node, url, size) {
+function PuzzleGame(node, url, size, debugMode) {
     var puzzles,
         puzzlesInOrder = [],
         piecesCount;
@@ -53,7 +53,7 @@ function PuzzleGame(node, url, size) {
         init();
     }, function(complete, all) {
         node.innerHTML = 'Prepare pieces: ' + complete + '/' + all;    
-    });
+    }, debugMode);
 
     var blockStart = false;
 

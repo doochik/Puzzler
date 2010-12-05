@@ -14,7 +14,7 @@
  * @param xCount
  * @param yCount
  */
-var Puzzler = function(imageSrc, type, onComplete, onProgress) {
+var Puzzler = function(imageSrc, type, onComplete, onProgress, debugMode) {
     var image = new Image();
 
     var self = this;
@@ -168,8 +168,9 @@ var Puzzler = function(imageSrc, type, onComplete, onProgress) {
             relationSide.attachSize = cutter.getSize(pieceHeight);
             neighbours['top'] = relationSide;
 
-//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
-
+            if (debugMode) {
+                self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+            }
         }
 
         if (hasJigsaw(pieceRelation[1])) {
@@ -182,8 +183,9 @@ var Puzzler = function(imageSrc, type, onComplete, onProgress) {
             relationSide.attachSize = cutter.getSize(pieceWidth);
             neighbours['right'] = relationSide;
 
-//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
-
+            if (debugMode) {
+                self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+            }
         }
 
         if (hasJigsaw(pieceRelation[2])) {
@@ -196,8 +198,9 @@ var Puzzler = function(imageSrc, type, onComplete, onProgress) {
             relationSide.attachSize = cutter.getSize(pieceHeight);
             neighbours['bottom'] = relationSide;
 
-//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
-
+            if (debugMode) {
+                self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+            }
         }
 
         if (hasJigsaw(pieceRelation[3])) {
@@ -211,8 +214,9 @@ var Puzzler = function(imageSrc, type, onComplete, onProgress) {
 
             neighbours['left'] = relationSide;
 
-//                    self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
-
+            if (debugMode) {
+                self.drawPoint(canvas, relationSide.offsetX, relationSide.offsetY);
+            }
         }
 
         var container = document.createElement('div');
@@ -272,7 +276,6 @@ var Puzzler = function(imageSrc, type, onComplete, onProgress) {
 
 Puzzler.prototype = {
 
-    //TODO: debug function
     drawPoint: function(canvas, x, y) {
         var canvasContext = canvas.getContext('2d');
 

@@ -35,6 +35,8 @@
         <option value="big">big</option>
         </select>
 
+        Debug mode: <input type="checkbox" name="debug" value="on"/>
+
         <input type="submit" value="Start" id="startGame"/>
     </fieldset>
 </form>
@@ -55,7 +57,7 @@
             dest.innerHTML = 'Loading image...';
             document.body.appendChild(dest);
 
-            new PuzzleGame(dest, url, this['size'].value);
+            new PuzzleGame(dest, url, this['size'].value, this.debug.checked);
         }, false);
     } else {
         document.body.innerHTML = '<h1>Sorry, but you browser doesn\'t support "Canvas". Please, use modern browser such as Firefox, Opera, Safari or Chrome</h1>';

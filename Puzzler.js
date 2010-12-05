@@ -32,7 +32,6 @@ var Puzzler = function(imageSrc, type, jigsaws, onComplete, onProgress, debugMod
     for (var i = 0, j = jigsaws.length; i < j; i++) {
         var jigsaw = jigsaws[i];
         if (jigsaw in this.knownJigsaws) {
-            console.log('add', jigsaw);
             this.jigsaws.push(this.knownJigsaws[jigsaw]);
         }
     }

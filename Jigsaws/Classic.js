@@ -47,8 +47,7 @@
         },
 
         male_0: function(canvas, width, height, x, y) {
-            var rw = width / 3,
-                x1 = Math.round(x),
+            var x1 = Math.round(x),
                 y1 = 0,
                 x2 = Math.round(width + x),
                 y2 = y;
@@ -76,8 +75,7 @@
         },
 
         male_1: function(canvas, width, height, x, y) {
-            var rh = height / 3,
-                x1 = Math.round(width + x),
+            var x1 = Math.round(width + x),
                 y1 = Math.round(y),
                 x2 = Math.round(canvas.width),
                 y2 = Math.round(height + y);
@@ -106,8 +104,7 @@
         },
 
         male_2: function(canvas, width, height, x, y) {
-            var rw = width / 3,
-                x1 = Math.round(x),
+            var x1 = Math.round(x),
                 y1 = Math.round(height + y),
                 x2 = Math.round(x + width),
                 y2 = Math.round(canvas.height);
@@ -133,8 +130,7 @@
         },
 
         male_3: function(canvas, width, height, x, y) {
-            var rh = height / 3,
-                x1 = 0,
+            var x1 = 0,
                 y1 = Math.round(y),
                 x2 = Math.round(x),
                 y2 = Math.round(y + height);
@@ -163,8 +159,7 @@
         },
 
         female_0: function(canvas, width, height, x, y) {
-            var rw = width / 3,
-                x1 = Math.round(x),
+            var x1 = Math.round(x),
                 y1 = Math.round(y),
                 x2 = Math.round(width + x),
                 y2 = Math.round(this.getMaleSize(height) + y);
@@ -190,8 +185,7 @@
         },
 
         female_1: function(canvas, width, height, x, y) {
-            var rh = height / 3,
-                x1 = Math.round(width + x),
+            var x1 = Math.round(width + x),
                 y1 = Math.round(y),
                 x2 = Math.round(canvas.width),
                 y2 = Math.round(y + height);
@@ -220,8 +214,7 @@
         },
 
         female_2: function(canvas, width, height, x, y) {
-            var rw = width / 3,
-                x1 = Math.round(x),
+            var x1 = Math.round(x),
                 y1 = Math.round(height + y),
                 x2 = Math.round(width + x),
                 y2 = Math.round(canvas.height);
@@ -249,8 +242,7 @@
         },
 
         female_3: function(canvas, width, height, x, y) {
-            var rh = height / 3,
-                x1 = Math.round(x),
+            var x1 = Math.round(x),
                 y1 = Math.round(y),
                 x2 = Math.round(this.getMaleSize(width) + x),
                 y2 = Math.round(height + y);

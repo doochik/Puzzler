@@ -3,12 +3,6 @@
     var jigsaw = {
         name: 'rectangle',
 
-        /**
-         * Размер.
-         * @type Number
-         */
-        _size: 0.2,
-
         _relationSide: function(type, x1, y1, x2, y2) {
             return {
                 type: type,
@@ -137,12 +131,8 @@
 
             this._makeFemale(canvas, x1, y1, x2, y2);
             return this._relationSide('female', x1, y1, x2, y2);
-        },
-
-        getSize: function(size, male) {
-            return male ? Math.round(size * this._size) : 0;
         }
     };
 
-    Puzzler.registerJigsaw(jigsaw);
+    Puzzler.registerJigsaw(Puzzler.makeJigsaw(jigsaw));
 })();

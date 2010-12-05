@@ -3,7 +3,7 @@
     var jigsaw = {
             name: 'arc',
 
-            _size: 0.15,
+            _size: 0.2,
 
             getSize: function(size, male) {
                 return male ? Math.round(size*this._size) : 0;
@@ -136,7 +136,7 @@
                 this._makeTransparent(canvas, x1 - size, y1, x1 + size, size, true);
 
                 return {
-                    type: 'male',
+                    type: 'female',
                     offsetX: x1,
                     offsetY: Math.round(size/2)
                 };
@@ -158,7 +158,7 @@
                 this._makeTransparent(canvas, x1 - size, y1-size, x1, y1+size, true);
 
                 return {
-                    type: 'male',
+                    type: 'female',
                     offsetX: x1 - Math.round(size/2),
                     offsetY: y1
                 };
@@ -180,7 +180,7 @@
                 this._makeTransparent(canvas, x1 - size, y1 - size, x1 + size, y1, true);
 
                 return {
-                    type: 'male',
+                    type: 'female',
                     offsetX: x1,
                     offsetY: y1 - Math.round(size/2)
                 };
@@ -202,7 +202,7 @@
                 this._makeTransparent(canvas, x1, 0, x1 + size, canvas.height, true);
 
                 return {
-                    type: 'male',
+                    type: 'female',
                     offsetX: Math.round(size/2),
                     offsetY: y1
                 };

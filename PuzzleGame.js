@@ -1,19 +1,33 @@
 function PuzzleGame(node, url, size) {
     var puzzles,
-
+        puzzlesInOrder = [],
         piecesCount;
 
-    var Puzz = new Puzzler(url, size, function(pieces, countX, countY) {
+    var Puzz = new Puzzler(url, size, function(pieces, countX, countY, size) {
         puzzles = pieces;
+
+        for (y = 0; y < countY; y++) {
+            puzzlesInOrder[y] = [].concat(puzzles[y]);
+        }
 
         piecesCount = countX*countY;
 
         var x = 0, y = 0;
 
-        /*var shuffle = function(o){ //v1.0
-            for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-            return o;
-        };*/
+        // shuffle
+        for (y = 0; y < countY; y++) {
+            for (x = 0; x < countX; x++) {
+                var random = Math.floor(Math.random() * countX * countY);
+                //x = [y, y = x][0]
+                var tempX = random % countY;
+                var tempY = Math.floor(random / countX);
+                var temp = puzzles[tempY][tempX];
+                puzzles[tempY][tempX] = puzzles[y][x];
+                puzzles[y][x] = temp;
+            }
+        }
+
+        x = 0; y = 0;
 
         for (var j = 0; j < countY; j++) {
             for (var i = 0; i < countX; i++) {
@@ -83,7 +97,7 @@ function PuzzleGame(node, url, size) {
             for (var myAttachSideName in piece.neighbours) {
                 var myAttachSide = piece.neighbours[myAttachSideName];
 
-                var neighbour = puzzles[myAttachSide.attachToY][myAttachSide.attachToX];
+                var neighbour = puzzlesInOrder[myAttachSide.attachToY][myAttachSide.attachToX];
 
                 var neighbourContainer = neighbour.container,
                     neighbourLeft = parseInt(neighbourContainer.style.left, 10),
@@ -113,7 +127,7 @@ function PuzzleGame(node, url, size) {
 
                         for (var key in newElement.pieces) {
                             key = Puzz.pieceKeyToArray(key);
-                            puzzles[key[0]][key[1]] = newElement;
+                            puzzlesInOrder[key[0]][key[1]] = newElement;
                         }
 
                         if (piecesCount === 1) {
@@ -124,7 +138,7 @@ function PuzzleGame(node, url, size) {
                             container.style.top = 0;
                             container.style.left = 0;
 
-                            var first = container.querySelector('#part0-0'),
+                            var first = puzzlesInOrder[0][0].container,
                                 top = parseInt(first.style.top, 10),
                                 left = parseInt(first.style.left, 10),
                                 canvaces = container.getElementsByTagName('canvas');

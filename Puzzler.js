@@ -68,7 +68,7 @@ var Puzzler = function(imageSrc, type, onComplete, onProgress) {
             if (y < yCount) {
                 setTimeout(arguments.callee, 10);
             } else {
-                onComplete(pieces, xCount, yCount);
+                onComplete(pieces, xCount, yCount, pieceHeight);
             }
         }, 10);
         
@@ -101,7 +101,6 @@ var Puzzler = function(imageSrc, type, onComplete, onProgress) {
         var pieceNullY = 0;
 
         var canvas = document.createElement('canvas');
-        canvas.id = 'part' + y + '-' + x;
         canvas.width = pieceWidth;
         canvas.height = pieceHeight;
 
@@ -363,8 +362,9 @@ Puzzler.prototype = {
 
         container2.container.parentNode.removeChild(container2.container);
 
-        this._fixDuplicateConnectors(container1, 'right', 'left');
-        this._fixDuplicateConnectors(container1, 'bottom', 'top');
+//        this._fixDuplicateConnectors(container1, 'right', 'left');
+//        this._fixDuplicateConnectors(container1, 'bottom', 'top');
+        this._deleteDuplicateConnectorsByIndex(container1);
 
         return container1;
     },
@@ -389,6 +389,53 @@ Puzzler.prototype = {
                     }
                 }
             }
+        }
+    },
+
+    _oppositeSide: {
+        'right': 'left',
+        'left': 'right',
+        'top': 'bottom',
+        'bottom': 'top'
+    },
+
+    /**
+     * Delete duplicate connectors by its index.
+     * Piece[3][4]['left'] delete Piece[3][3]['right'].
+     * @param container
+     */
+    _deleteDuplicateConnectorsByIndex: function(container) {
+        var pieces = container.pieces;
+
+        for (var piece1Index in pieces) {
+            var piece1 = pieces[piece1Index],
+                piece1Neighbours = piece1.neighbours;
+
+            for (var connectionSide in piece1Neighbours) {
+                var connectorParams = piece1Neighbours[connectionSide];
+                var connectorSide = this._oppositeSide[connectionSide];
+                var neighbour = pieces[this.pieceKey(connectorParams.attachToX, connectorParams.attachToY)];
+                if (neighbour && neighbour.neighbours && neighbour.neighbours[connectorSide]) {
+                    delete neighbour.neighbours[connectorSide];
+                    delete piece1Neighbours[connectionSide];
+                }
+            }
+
+            /*if (piece1Connector) {
+                for (var piece2Index in container.pieces) {
+                    var piece2 = container.pieces[piece2Index],
+                        piece2Connector = piece2.neighbours[connectToSide];
+
+                    if (piece2Connector) {
+                        if (piece1Connector.offsetX === piece2Connector.offsetX
+                            && piece1Connector.offsetY === piece2Connector.offsetY) {
+
+                            delete piece1.neighbours[checkSide];
+                            delete piece2.neighbours[connectToSide];
+                        }
+                    }
+                }
+            }*/
         }
     },
 

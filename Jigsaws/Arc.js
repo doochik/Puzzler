@@ -11,7 +11,7 @@
                 var context = canvas.getContext('2d');
                 context.beginPath();
                 context.strokeStyle = 'transparent';
-                context.arc(x1, y, size, 0, Math.PI/180*180, true);
+                context.arc(x1, y, size, 0, this._degToRad(180), true);
                 context.stroke();
                 context.closePath();
 
@@ -33,7 +33,7 @@
                 var context = canvas.getContext('2d');
                 context.beginPath();
                 context.strokeStyle = 'transparent';
-                context.arc(x1, y1, size, Math.PI/180*90, Math.PI/180*270, true);
+                context.arc(x1, y1, size, this._degToRad(90), this._degToRad(270), true);
                 context.stroke();
                 context.closePath();
 
@@ -55,7 +55,7 @@
                 var context = canvas.getContext('2d');
                 context.beginPath();
                 context.strokeStyle = 'transparent';
-                context.arc(x1, y1, size, Math.PI/180*180, Math.PI/180*360, true);
+                context.arc(x1, y1, size, this._degToRad(180), this._degToRad(360), true);
                 context.stroke();
                 context.closePath();
 
@@ -77,7 +77,7 @@
                 var context = canvas.getContext('2d');
                 context.beginPath();
                 context.strokeStyle = 'transparent';
-                context.arc(x1, y1, size, -Math.PI/180*90, Math.PI/180*90, true);
+                context.arc(x1, y1, size, this._degToRad(-90), this._degToRad(90), true);
                 context.stroke();
                 context.closePath();
 
@@ -99,7 +99,7 @@
                 var context = canvas.getContext('2d');
                 context.beginPath();
                 context.strokeStyle = 'transparent';
-                context.arc(x1, y1, size, Math.PI/180*180, Math.PI/180*360, true);
+                context.arc(x1, y1, size, this._degToRad(180), this._degToRad(360), true);
                 context.stroke();
                 context.closePath();
 
@@ -121,7 +121,7 @@
                 var context = canvas.getContext('2d');
                 context.beginPath();
                 context.strokeStyle = 'transparent';
-                context.arc(x1, y1, size, -Math.PI/180*90, Math.PI/180*90, true);
+                context.arc(x1, y1, size, this._degToRad(-90), this._degToRad(90), true);
                 context.stroke();
                 context.closePath();
 
@@ -143,7 +143,7 @@
                 var context = canvas.getContext('2d');
                 context.beginPath();
                 context.strokeStyle = 'transparent';
-                context.arc(x1, y1, size, Math.PI/180*0, Math.PI/180*180, true);
+                context.arc(x1, y1, size, this._degToRad(0), this._degToRad(180), true);
                 context.stroke();
                 context.closePath();
 
@@ -165,7 +165,7 @@
                 var context = canvas.getContext('2d');
                 context.beginPath();
                 context.strokeStyle = 'transparent';
-                context.arc(x1, y1, size, -Math.PI/180*90, Math.PI/180*90, false);
+                context.arc(x1, y1, size, this._degToRad(-90), this._degToRad(90), false);
                 context.stroke();
                 context.closePath();
 

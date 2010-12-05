@@ -42,6 +42,21 @@ Puzzler.aJigsaw = {
     },
 
     /**
+     * @constant
+     * @type Number
+     */
+    _radInDeg: Math.PI/180,
+
+    /**
+     * Convert degrees to radians.
+     * @param {Number} deg
+     * @return {Number}
+     */
+    _degToRad: function(deg) {
+        return deg * this._radInDeg;
+    },
+
+    /**
      * Return tab size.
      * @param {Number} size Size of side.
      * @param {Boolean} male Male or female.

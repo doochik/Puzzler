@@ -131,5 +131,5 @@
         }
     };
 
-    Puzzler.registerJigsaw('rectangle', jigsaw);
+    Puzzler.registerJigsaw(jigsaw);
 })();

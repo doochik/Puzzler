@@ -321,5 +321,5 @@
         }
     };
 
-    Puzzler.registerJigsaw('classic', jigsaw);
+    Puzzler.registerJigsaw(jigsaw);
 })();

@@ -469,12 +469,12 @@ Puzzler.prototype = {
     knownJigsaws: {}
 };
 
-Puzzler.registerJigsaw = function(name, jigsaw) {
-    if (name in Puzzler.prototype.knownJigsaws) {
+Puzzler.registerJigsaw = function(jigsaw) {
+    if (jigsaw.name in Puzzler.prototype.knownJigsaws) {
         throw new Error('Jigsaw with such name is already exists.')
     }
 
-    Puzzler.prototype.knownJigsaws[name] = jigsaw;
+    Puzzler.prototype.knownJigsaws[jigsaw.name] = jigsaw;
 };
 
 /**

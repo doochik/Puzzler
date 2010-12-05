@@ -4,13 +4,13 @@
         name: 'classic',
 
         beziers: [
-			[0,192,0,0,0,0],
-			[0,0,448,-224,448,-96],
-			[448,-32,384,-32,384,64],
-			[384,160,448,192,512,192],
-			[576,192,640,160,640,64],
-			[640,-32,576,-32,576,-96],
-			[576,-224,1024,0,1024,0],
+            [0,192,0,0,0,0],
+            [0,0,448,-224,448,-96],
+            [448,-32,384,-32,384,64],
+            [384,160,448,192,512,192],
+            [576,192,640,160,640,64],
+            [640,-32,576,-32,576,-96],
+            [576,-224,1024,0,1024,0],
             [1024,0, 1024,192, 1024,192],
             [1024,192, 0,192, 0,192]
         ],
@@ -20,8 +20,8 @@
 
         _rotatePoint: function(x, y, degrees) {
             return [
-                Math.round(x*Math.cos(Math.PI/180*degrees) - y*Math.sin(Math.PI/180*degrees)),
-                Math.round(x*Math.sin(Math.PI/180*degrees) + y*Math.cos(Math.PI/180*degrees))
+                Math.round(x * Math.cos(Math.PI / 180 * degrees) - y * Math.sin(Math.PI / 180 * degrees)),
+                Math.round(x * Math.sin(Math.PI / 180 * degrees) + y * Math.cos(Math.PI / 180 * degrees))
             ];
         },
 
@@ -54,17 +54,17 @@
 
             var context = canvas.getContext('2d');
 
-            var xProp = width/1024;
-            var yProp = y/this.tabSize;
+            var xProp = width / 1024;
+            var yProp = y / this.tabSize;
 
             context.beginPath();
             context.strokeStyle = 'transparent';
             this._rotate(180).forEach(function(b) {
                 context.bezierCurveTo(
-                    b[0]*xProp + width + x, b[1]*yProp + y2,
-                    b[2]*xProp + width + x, b[3]*yProp + y2,
-                    b[4]*xProp + width + x, b[5]*yProp + y2
-                );
+                    b[0] * xProp + width + x, b[1] * yProp + y2,
+                    b[2] * xProp + width + x, b[3] * yProp + y2,
+                    b[4] * xProp + width + x, b[5] * yProp + y2
+                    );
             });
             context.stroke();
             context.closePath();
@@ -82,15 +82,15 @@
 
             var context = canvas.getContext('2d');
 
-            var xProp = (x2 - x1)/this.tabSize;
-            var yProp = height/1024;
+            var xProp = (x2 - x1) / this.tabSize;
+            var yProp = height / 1024;
 
             context.beginPath();
             context.strokeStyle = 'transparent';
             this._rotate(270).forEach(function(b) {
-                context.bezierCurveTo(b[0]*xProp + x1, b[1]*yProp + y2,
-                                      b[2]*xProp + x1, b[3]*yProp + y2,
-                                      b[4]*xProp + x1, b[5]*yProp + y2);
+                context.bezierCurveTo(b[0] * xProp + x1, b[1] * yProp + y2,
+                                      b[2] * xProp + x1, b[3] * yProp + y2,
+                                      b[4] * xProp + x1, b[5] * yProp + y2);
             });
             context.stroke();
             context.closePath();
@@ -111,20 +111,20 @@
 
             var context = canvas.getContext('2d');
 
-            var xProp = width/1024;
-            var yProp = this.getMaleSize(height)/this.tabSize;
+            var xProp = width / 1024;
+            var yProp = this.getMaleSize(height) / this.tabSize;
 
             context.beginPath();
             context.strokeStyle = 'transparent';
             this.beziers.forEach(function(b) {
-                context.bezierCurveTo(b[0]*xProp + x1, b[1]*yProp + y1,
-                                      b[2]*xProp + x1, b[3]*yProp + y1,
-                                      b[4]*xProp + x1, b[5]*yProp + y1);
+                context.bezierCurveTo(b[0] * xProp + x1, b[1] * yProp + y1,
+                                      b[2] * xProp + x1, b[3] * yProp + y1,
+                                      b[4] * xProp + x1, b[5] * yProp + y1);
             });
             context.stroke();
             context.closePath();
 
-            this._makeTransparent(context, x1, y1 - Math.round(this.waveSize*yProp), x2, y2, true);
+            this._makeTransparent(context, x1, y1 - Math.round(this.waveSize * yProp), x2, y2, true);
 
             return this._relationSide('male', x1, y1, x2, y2);
         },
@@ -137,15 +137,15 @@
 
             var context = canvas.getContext('2d');
 
-            var xProp = (x2 - x1)/this.tabSize;
-            var yProp = height/1024;
+            var xProp = (x2 - x1) / this.tabSize;
+            var yProp = height / 1024;
 
             context.beginPath();
             context.strokeStyle = 'transparent';
             this._rotate(90).forEach(function(b) {
-                context.bezierCurveTo(b[0]*xProp + x2, b[1]*yProp + y1,
-                                      b[2]*xProp + x2, b[3]*yProp + y1,
-                                      b[4]*xProp + x2, b[5]*yProp + y1);
+                context.bezierCurveTo(b[0] * xProp + x2, b[1] * yProp + y1,
+                                      b[2] * xProp + x2, b[3] * yProp + y1,
+                                      b[4] * xProp + x2, b[5] * yProp + y1);
             });
             context.stroke();
             context.closePath();
@@ -166,15 +166,15 @@
 
             var context = canvas.getContext('2d');
 
-            var xProp = width/1024;
-            var yProp = this.getMaleSize(height)/this.tabSize;
+            var xProp = width / 1024;
+            var yProp = this.getMaleSize(height) / this.tabSize;
 
             context.beginPath();
             context.strokeStyle = 'transparent';
             this.beziers.forEach(function(b) {
-                context.bezierCurveTo(b[0]*xProp + x, b[1]*yProp + y1,
-                                      b[2]*xProp + x, b[3]*yProp + y1,
-                                      b[4]*xProp + x, b[5]*yProp + y1);
+                context.bezierCurveTo(b[0] * xProp + x, b[1] * yProp + y1,
+                                      b[2] * xProp + x, b[3] * yProp + y1,
+                                      b[4] * xProp + x, b[5] * yProp + y1);
             });
             context.stroke();
             context.closePath();
@@ -192,15 +192,15 @@
 
             var context = canvas.getContext('2d');
 
-            var xProp = (x2 - x1)/this.waveSize;
-            var yProp = height/1024;
+            var xProp = (x2 - x1) / this.waveSize;
+            var yProp = height / 1024;
 
             context.beginPath();
             context.strokeStyle = 'transparent';
             this._rotate(90).forEach(function(b) {
-                context.bezierCurveTo(b[0]*xProp + x1, b[1]*yProp + y1,
-                                      b[2]*xProp + x1, b[3]*yProp + y1,
-                                      b[4]*xProp + x1, b[5]*yProp + y1);
+                context.bezierCurveTo(b[0] * xProp + x1, b[1] * yProp + y1,
+                                      b[2] * xProp + x1, b[3] * yProp + y1,
+                                      b[4] * xProp + x1, b[5] * yProp + y1);
             });
             context.stroke();
             context.closePath();
@@ -221,17 +221,17 @@
 
             var context = canvas.getContext('2d');
 
-            var xProp = width/1024;
-            var yProp = this.getMaleSize(height)/this.tabSize;
+            var xProp = width / 1024;
+            var yProp = this.getMaleSize(height) / this.tabSize;
 
             context.beginPath();
             context.strokeStyle = 'transparent';
             this._rotate(180).forEach(function(b) {
                 context.bezierCurveTo(
-                    b[0]*xProp + width + x, b[1]*yProp + y1,
-                    b[2]*xProp + width + x, b[3]*yProp + y1,
-                    b[4]*xProp + width + x, b[5]*yProp + y1
-                );
+                    b[0] * xProp + width + x, b[1] * yProp + y1,
+                    b[2] * xProp + width + x, b[3] * yProp + y1,
+                    b[4] * xProp + width + x, b[5] * yProp + y1
+                    );
             });
             context.stroke();
             context.closePath();
@@ -249,15 +249,15 @@
 
             var context = canvas.getContext('2d');
 
-            var xProp = (x2 - x1)/this.tabSize;
-            var yProp = height/1024;
+            var xProp = (x2 - x1) / this.tabSize;
+            var yProp = height / 1024;
 
             context.beginPath();
             context.strokeStyle = 'transparent';
             this._rotate(270).forEach(function(b) {
-                context.bezierCurveTo(b[0]*xProp + x1, b[1]*yProp + y2,
-                                      b[2]*xProp + x1, b[3]*yProp + y2,
-                                      b[4]*xProp + x1, b[5]*yProp + y2);
+                context.bezierCurveTo(b[0] * xProp + x1, b[1] * yProp + y2,
+                                      b[2] * xProp + x1, b[3] * yProp + y2,
+                                      b[4] * xProp + x1, b[5] * yProp + y2);
             });
             context.stroke();
             context.closePath();
@@ -280,7 +280,7 @@
 
         getFemaleSize: function(size) {
             // get proportion and calc size for wave
-            return Math.round(this.getMaleSize(size)/this.tabSize * this.waveSize);
+            return Math.round(this.getMaleSize(size) / this.tabSize * this.waveSize);
         }
     };
 

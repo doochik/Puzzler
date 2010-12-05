@@ -1,55 +1,7 @@
 (function() {
 
     var jigsaw = {
-        name: 'rectangle',
-
-        /*beziers:[
-			[
-                0,328,
-                0,136,
-                0,136
-            ],
-			[
-                0,136,
-                448,-88,
-                448,40
-            ],
-			[
-                448,104,
-                384,104,
-                384,200
-            ],
-			[
-                384,296,
-                448,328,
-                512,328
-            ],
-			[
-                576,328,
-                640,296,
-                640,200
-            ],
-			[
-                640,104,
-                576,104,
-                576,40
-            ],
-			[
-                576,-88,
-                1024,136,
-                1024,136
-            ],
-            [
-                1024,136,
-                1024,328,
-                1024,328
-            ],
-            [
-                1024,328,
-                0,328,
-                0,328
-            ]
-        ],*/
+        name: 'classic',
 
         beziers: [
 			[0,192,0,0,0,0],
@@ -87,16 +39,15 @@
         },
 
         /**
-         * @param canvas
+         * @param {CanvasContext} context
          * @param x1
          * @param y1
          * @param x2
          * @param y2
          * @param female
          */
-        _makeTransparent: function(canvas, x1, y1, x2, y2, female) {
-            var context = canvas.getContext('2d'),
-                i, j;
+        _makeTransparent: function(context, x1, y1, x2, y2, female) {
+            var i, j;
 
             for (i = x1; i < x2; i++) {
                 for (j = y1; j < y2; j++) {
@@ -124,11 +75,6 @@
             };
         },
 
-        _makeFemale: function(canvas, x1, y1, x2, y2) {
-            var context = canvas.getContext('2d');
-            context.clearRect(x1, y1, x2 - x1, y2 - y1);
-        },
-
         male_0: function(canvas, width, height, x, y) {
             var rw = width / 3,
                 x1 = Math.round(x),
@@ -153,7 +99,7 @@
             context.stroke();
             context.closePath();
 
-            this._makeTransparent(canvas, x1, y1, x2, y2 + this.getFemaleSize(height), true);
+            this._makeTransparent(context, x1, y1, x2, y2 + this.getFemaleSize(height), true);
 
             return this._relationSide('male', x1, y1, x2, y2 + this.getFemaleSize(height));
         },
@@ -183,7 +129,7 @@
             context.clearRect(x1, 0, x2, y);
             context.clearRect(x1, y + height, x2, canvas.height);
 
-            this._makeTransparent(canvas, x1 - this.getFemaleSize(width), y1, x2, y2, true);
+            this._makeTransparent(context, x1 - this.getFemaleSize(width), y1, x2, y2, true);
 
             return this._relationSide('male', x1, y1, x2, y2);
         },
@@ -210,7 +156,7 @@
             context.stroke();
             context.closePath();
 
-            this._makeTransparent(canvas, x1, y1 - Math.round(this.waveSize*yProp), x2, y2, true);
+            this._makeTransparent(context, x1, y1 - Math.round(this.waveSize*yProp), x2, y2, true);
 
             return this._relationSide('male', x1, y1, x2, y2);
         },
@@ -240,7 +186,7 @@
             context.clearRect(x1, 0, x2, y1);
             context.clearRect(x1, y2, x2, canvas.height);
 
-            this._makeTransparent(canvas, x1, y1, x2 + this.getFemaleSize(width), y2, true);
+            this._makeTransparent(context, x1, y1, x2 + this.getFemaleSize(width), y2, true);
 
             return this._relationSide('male', x1, y1, x2 + this.getFemaleSize(width), y2);
         },
@@ -267,7 +213,7 @@
             context.stroke();
             context.closePath();
 
-            this._makeTransparent(canvas, x1, 0, x2, y2);
+            this._makeTransparent(context, x1, 0, x2, y2);
 
             return this._relationSide('female', x1, y1, x2, y2);
         },
@@ -297,7 +243,7 @@
             context.clearRect(x1, 0, x2, y);
             context.clearRect(x1, y + height, x2, canvas.height);
 
-            this._makeTransparent(canvas, x1 - this.getMaleSize(width) + 1 /*strange blank line*/, y1, x2, y2);
+            this._makeTransparent(context, x1 - this.getMaleSize(width) + 1 /*strange blank line*/, y1, x2, y2);
 
             return this._relationSide('female', x1 - this.getMaleSize(width), y1, x2, y2);
         },
@@ -326,7 +272,7 @@
             context.stroke();
             context.closePath();
 
-            this._makeTransparent(canvas, x1, y1 - this.getMaleSize(height), x2, y2);
+            this._makeTransparent(context, x1, y1 - this.getMaleSize(height), x2, y2);
 
             return this._relationSide('female', x1, y1 - this.getMaleSize(height), x2, y2);
         },
@@ -356,7 +302,7 @@
             context.clearRect(0, 0, x1, y);
             context.clearRect(0, y + height, x1, canvas.height);
 
-            this._makeTransparent(canvas, 0, y1, x2, y2);
+            this._makeTransparent(context, 0, y1, x2, y2);
 
             return this._relationSide('female', x1, y1, x2, y2);
         },

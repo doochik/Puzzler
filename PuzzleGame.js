@@ -84,7 +84,7 @@ function PuzzleGame(node, url, size, jigsaws, debugMode) {
         movedContainer.style.left = (startLeft + (e.clientX - startX)) + 'px';
     }
 
-    function stopDrag(e) {
+    function stopDrag() {
         document.removeEventListener('mousemove', continueDrag, false);
         document.removeEventListener('mouseup', stopDrag, false);
 

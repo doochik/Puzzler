@@ -114,7 +114,7 @@
          * Размер.
          * @type Number
          */
-        _size: 0.25,
+        _size: 0.2,
 
         _relationSide: function(type, x1, y1, x2, y2) {
             return {

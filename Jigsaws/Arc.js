@@ -3,36 +3,6 @@
     var jigsaw = {
             name: 'arc',
 
-            _size: 0.2,
-
-            getSize: function(size, male) {
-                return male ? Math.round(size*this._size) : 0;
-            },
-
-            /**
-             * @param canvas
-             * @param x1
-             * @param y1
-             * @param x2
-             * @param y2
-             * @param female
-             */
-            _makeTransparent: function(canvas, x1, y1, x2, y2, female) {
-                var context = canvas.getContext('2d'),
-                    i, j;
-
-                for (i = x1; i < x2; i++) {
-                    for (j = y1; j < y2; j++) {
-                        // bitwise XOR
-                        // inPath ^ true === 0
-                        // !inPath ^ false === 0
-                        if ((context.isPointInPath(i, j) ^ female) === 0) {
-                            context.clearRect(i, j, 1, 1);
-                        }
-                    }
-                }
-            },
-
             male_0: function(canvas, width, height, x, y) {
                 var x1 = Math.round(width/2 + x);
 
@@ -45,7 +15,7 @@
                 context.stroke();
                 context.closePath();
 
-                this._makeTransparent(canvas, 0, 0, canvas.width, y, false);
+                this._makeTransparent(context, 0, 0, canvas.width, y, false);
 
                 return {
                     type: 'male',
@@ -67,7 +37,7 @@
                 context.stroke();
                 context.closePath();
 
-                this._makeTransparent(canvas, x1, 0, canvas.width, canvas.height, false);
+                this._makeTransparent(context, x1, 0, canvas.width, canvas.height, false);
 
                 return {
                     type: 'male',
@@ -89,7 +59,7 @@
                 context.stroke();
                 context.closePath();
 
-                this._makeTransparent(canvas, 0, y1, canvas.width, canvas.height, false);
+                this._makeTransparent(context, 0, y1, canvas.width, canvas.height, false);
 
                 return {
                     type: 'male',
@@ -111,7 +81,7 @@
                 context.stroke();
                 context.closePath();
 
-                this._makeTransparent(canvas, 0, 0, x1, canvas.height, false);
+                this._makeTransparent(context, 0, 0, x1, canvas.height, false);
 
                 return {
                     type: 'male',
@@ -133,7 +103,7 @@
                 context.stroke();
                 context.closePath();
 
-                this._makeTransparent(canvas, x1 - size, y1, x1 + size, size, true);
+                this._makeTransparent(context, x1 - size, y1, x1 + size, size, true);
 
                 return {
                     type: 'female',
@@ -155,7 +125,7 @@
                 context.stroke();
                 context.closePath();
 
-                this._makeTransparent(canvas, x1 - size, y1-size, x1, y1+size, true);
+                this._makeTransparent(context, x1 - size, y1-size, x1, y1+size, true);
 
                 return {
                     type: 'female',
@@ -177,7 +147,7 @@
                 context.stroke();
                 context.closePath();
 
-                this._makeTransparent(canvas, x1 - size, y1 - size, x1 + size, y1, true);
+                this._makeTransparent(context, x1 - size, y1 - size, x1 + size, y1, true);
 
                 return {
                     type: 'female',
@@ -199,7 +169,7 @@
                 context.stroke();
                 context.closePath();
 
-                this._makeTransparent(canvas, x1, 0, x1 + size, canvas.height, true);
+                this._makeTransparent(context, x1, 0, x1 + size, canvas.height, true);
 
                 return {
                     type: 'female',
@@ -209,6 +179,6 @@
             }
         };
 
-    Puzzler.registerJigsaw(jigsaw);
+    Puzzler.registerJigsaw(Puzzler.makeJigsaw(jigsaw));
 
 })();

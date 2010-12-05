@@ -209,6 +209,6 @@
             }
         };
 
-    Puzzler.addJigsaw('', jigsaw);
+    Puzzler.registerJigsaw('arc', jigsaw);
 
 })();

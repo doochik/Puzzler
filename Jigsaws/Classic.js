@@ -375,5 +375,5 @@
         }
     };
 
-    Puzzler.addJigsaw('rectangle', jigsaw);
+    Puzzler.registerJigsaw('classic', jigsaw);
 })();

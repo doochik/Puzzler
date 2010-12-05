@@ -11,10 +11,8 @@
 /**
  * 
  * @param imageSrc
- * @param xCount
- * @param yCount
  */
-var Puzzler = function(imageSrc, type, onComplete, onProgress, debugMode) {
+var Puzzler = function(imageSrc, type, jigsaws, onComplete, onProgress, debugMode) {
     var image = new Image();
 
     var self = this;
@@ -28,6 +26,18 @@ var Puzzler = function(imageSrc, type, onComplete, onProgress, debugMode) {
     if (!(type in sizes)) {
         type = 'normal'
     }
+
+    this.jigsaws = [];
+
+    for (var i = 0, j = jigsaws.length; i < j; i++) {
+        var jigsaw = jigsaws[i];
+        if (jigsaw in this.knownJigsaws) {
+            console.log('add', jigsaw);
+            this.jigsaws.push(this.knownJigsaws[jigsaw]);
+        }
+    }
+
+    this.jigsawsLength = this.jigsaws.length;
 
     var pieceWidth = sizes[type];
     var pieceHeight = sizes[type];
@@ -457,21 +467,15 @@ Puzzler.prototype = {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
-    jigsaws: [
-        
-    ],
-
-    jigsawsLength: 0
-
+    knownJigsaws: {}
 };
 
-Puzzler.addJigsaw = function(name, jigsaw) {
-    if (name in Puzzler.prototype.jigsaws) {
+Puzzler.registerJigsaw = function(name, jigsaw) {
+    if (name in Puzzler.prototype.knownJigsaws) {
         throw new Error('Jigsaw with such name is already exists.')
     }
 
-    Puzzler.prototype.jigsaws.push(jigsaw);
-    Puzzler.prototype.jigsawsLength++;
+    Puzzler.prototype.knownJigsaws[name] = jigsaw;
 };
 
 /**

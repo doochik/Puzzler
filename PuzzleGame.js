@@ -1,9 +1,9 @@
-function PuzzleGame(node, url, size, debugMode) {
+function PuzzleGame(node, url, size, jigsaws, debugMode) {
     var puzzles,
         puzzlesInOrder = [],
         piecesCount;
 
-    var Puzz = new Puzzler(url, size, function(pieces, countX, countY, size) {
+    var Puzz = new Puzzler(url, size, jigsaws, function(pieces, countX, countY, size) {
         puzzles = pieces;
 
         for (y = 0; y < countY; y++) {

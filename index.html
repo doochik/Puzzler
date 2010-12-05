@@ -28,7 +28,8 @@
 <body>
 <form action="" id="form" style="display:none">
     <fieldset>
-        URL: <input type="text" name="url" value="img.jpg"/>
+        <legend>params</legend>
+        Image url: <input type="text" name="url" value="img.jpg"/>
         Size: <select name="size">
         <option value="small">small</option>
         <option value="normal" selected="selected">normal</option>
@@ -38,6 +39,12 @@
         Debug mode: <input type="checkbox" name="debug" value="on"/>
 
         <input type="submit" value="Start" id="startGame"/>
+    </fieldset>
+    <fieldset>
+        <legend>Types:</legend>
+        Classic: <input type="checkbox" name="jigsaws" value="classic" checked="checked"/>
+        | Rectangle: <input type="checkbox" name="jigsaws" value="rectangle"/>
+        | Arc: <input type="checkbox" name="jigsaws" value="arc"/>
     </fieldset>
 </form>
 <script type="text/javascript">
@@ -57,7 +64,14 @@
             dest.innerHTML = 'Loading image...';
             document.body.appendChild(dest);
 
-            new PuzzleGame(dest, url, this['size'].value, this.debug.checked);
+            var jigsaws = [];
+            for (var i = 0, j = this.jigsaws.length; i < j; i++) {
+                if (this.jigsaws[i].checked) {
+                    jigsaws.push(this.jigsaws[i].value);
+                }
+            }
+
+            new PuzzleGame(dest, url, this['size'].value, jigsaws, this.debug.checked);
         }, false);
     } else {
         document.body.innerHTML = '<h1>Sorry, but you browser doesn\'t support "Canvas". Please, use modern browser such as Firefox, Opera, Safari or Chrome</h1>';

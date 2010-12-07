@@ -275,12 +275,12 @@
         },
 
         getMaleSize: function(size) {
-            return Math.round(size * this._size);
+            return Math.ceil(size * this._size);
         },
 
         getFemaleSize: function(size) {
             // get proportion and calc size for wave
-            return Math.round(this.getMaleSize(size) / this.tabSize * this.waveSize);
+            return Math.ceil(this.getMaleSize(size) / this.tabSize * this.waveSize);
         }
     };
 

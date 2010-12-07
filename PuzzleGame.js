@@ -136,22 +136,22 @@ function PuzzleGame(node, url, size, jigsaws, debugMode) {
                         }
 
                         if (piecesCount === 1) {
-                            var container = puzzles[0][0].container;
+                            var container = newElement.container;
                             container.removeEventListener('mousedown', startDrag, false);
-                            puzzles = null;
-                            Puzz = null;
                             container.style.top = 0;
                             container.style.left = 0;
 
-                            var first = puzzlesInOrder[0][0].container,
-                                top = parseInt(first.style.top, 10),
-                                left = parseInt(first.style.left, 10),
-                                canvaces = container.getElementsByTagName('canvas');
+                            var first = newElement.pieces['0-0'].canvas;
+
+                            var top = parseInt(first.style.top, 10),
+                                left = parseInt(first.style.left, 10);
+
+                            var canvaces = container.getElementsByTagName('canvas');
 
                             for (var i = 0, j = canvaces.length; i < j; i++) {
                                 var canvas = canvaces[i];
-                                canvas.style.top = (parseInt(canvas.style.top, 10) + top) + 'px';
-                                canvas.style.left = (parseInt(canvas.style.left, 10) + top) + 'px';
+                                canvas.style.top = (parseInt(canvas.style.top, 10) - top) + 'px';
+                                canvas.style.left = (parseInt(canvas.style.left, 10) - left) + 'px';
                             }
 
 

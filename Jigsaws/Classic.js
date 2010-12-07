@@ -59,7 +59,10 @@
 
             context.beginPath();
             context.strokeStyle = 'transparent';
-            this._rotate(180).forEach(function(b) {
+            this._rotate(180).forEach(function(b, i) {
+                if (i === 0) {
+                    context.moveTo(b[0] * xProp + width + x, b[1] * yProp + y2);
+                }
                 context.bezierCurveTo(
                     b[0] * xProp + width + x, b[1] * yProp + y2,
                     b[2] * xProp + width + x, b[3] * yProp + y2,
@@ -87,7 +90,10 @@
 
             context.beginPath();
             context.strokeStyle = 'transparent';
-            this._rotate(270).forEach(function(b) {
+            this._rotate(270).forEach(function(b, i) {
+                if (i === 0) {
+                    context.moveTo(b[0] * xProp + x1, b[1] * yProp + y2);
+                }
                 context.bezierCurveTo(b[0] * xProp + x1, b[1] * yProp + y2,
                                       b[2] * xProp + x1, b[3] * yProp + y2,
                                       b[4] * xProp + x1, b[5] * yProp + y2);
@@ -116,7 +122,10 @@
 
             context.beginPath();
             context.strokeStyle = 'transparent';
-            this.beziers.forEach(function(b) {
+            this.beziers.forEach(function(b, i) {
+                if (i === 0) {
+                    context.moveTo(b[0] * xProp + x1, b[1] * yProp + y1);
+                }
                 context.bezierCurveTo(b[0] * xProp + x1, b[1] * yProp + y1,
                                       b[2] * xProp + x1, b[3] * yProp + y1,
                                       b[4] * xProp + x1, b[5] * yProp + y1);
@@ -142,7 +151,10 @@
 
             context.beginPath();
             context.strokeStyle = 'transparent';
-            this._rotate(90).forEach(function(b) {
+            this._rotate(90).forEach(function(b, i) {
+                if (i === 0) {
+                    context.moveTo(b[0] * xProp + x2, b[1] * yProp + y1);
+                }
                 context.bezierCurveTo(b[0] * xProp + x2, b[1] * yProp + y1,
                                       b[2] * xProp + x2, b[3] * yProp + y1,
                                       b[4] * xProp + x2, b[5] * yProp + y1);
@@ -171,7 +183,10 @@
 
             context.beginPath();
             context.strokeStyle = 'transparent';
-            this.beziers.forEach(function(b) {
+            this.beziers.forEach(function(b, i) {
+                if (i === 0) {
+                    context.moveTo(b[0] * xProp + x, b[1] * yProp + y1);
+                }
                 context.bezierCurveTo(b[0] * xProp + x, b[1] * yProp + y1,
                                       b[2] * xProp + x, b[3] * yProp + y1,
                                       b[4] * xProp + x, b[5] * yProp + y1);
@@ -197,7 +212,10 @@
 
             context.beginPath();
             context.strokeStyle = 'transparent';
-            this._rotate(90).forEach(function(b) {
+            this._rotate(90).forEach(function(b, i) {
+                if (i === 0) {
+                    context.moveTo(b[0] * xProp + x1, b[1] * yProp + y1);
+                }
                 context.bezierCurveTo(b[0] * xProp + x1, b[1] * yProp + y1,
                                       b[2] * xProp + x1, b[3] * yProp + y1,
                                       b[4] * xProp + x1, b[5] * yProp + y1);
@@ -226,7 +244,10 @@
 
             context.beginPath();
             context.strokeStyle = 'transparent';
-            this._rotate(180).forEach(function(b) {
+            this._rotate(180).forEach(function(b, i) {
+                if (i === 0) {
+                    context.moveTo(b[0] * xProp + width + x, b[1] * yProp + y1);
+                }
                 context.bezierCurveTo(
                     b[0] * xProp + width + x, b[1] * yProp + y1,
                     b[2] * xProp + width + x, b[3] * yProp + y1,
@@ -254,7 +275,10 @@
 
             context.beginPath();
             context.strokeStyle = 'transparent';
-            this._rotate(270).forEach(function(b) {
+            this._rotate(270).forEach(function(b, i) {
+                if (i === 0) {
+                    context.moveTo(b[0] * xProp + x1, b[1] * yProp + y2);
+                }
                 context.bezierCurveTo(b[0] * xProp + x1, b[1] * yProp + y2,
                                       b[2] * xProp + x1, b[3] * yProp + y2,
                                       b[4] * xProp + x1, b[5] * yProp + y2);
